@@ -1,4 +1,4 @@
-# Role Name
+# kudos.check_health
 
 Deployment and configuration of the KUDOS **Health Checker** framework (http://www.kudos.be/Projects/Health_checker.html)
 
