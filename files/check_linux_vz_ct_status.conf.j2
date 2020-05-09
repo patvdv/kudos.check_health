@@ -1,0 +1,35 @@
+#******************************************************************************
+# @(#) check_linux_vz_ct_status.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_openvz_ct_status HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_vz_ct_status.log_healthy | default('no') }}"
+
+# specify properties as displayed by the following commands:
+#   OpenVZ 6.x: 'vzlist -a -H -o ctid,status,onboot'
+#   OpenVZ 7.x: 'prlctl list --info -a' (release >20200411)
+# Format:
+#  [ct:<ct_id>:<runtime_status>:<boot_status>]
+# runtime_status should be 'running' or 'stopped'
+# boot_status should be 'yes' or 'no' (OpenVZ 6.x)
+# boot_status should be 'on' of 'off' (OpenVZ 7.x)
+# Examples (OpenVZ 6.x):
+#ct:100:running:yes
+# Examples (OpenVZ 7.x) (release >20200411):
+#ct:621240e6-fa79-406a-a3f9-26de47b5d789:running:on
+{% if hc_check_linux_vz_ct_status.ct is defined and hc_check_linux_vz_ct_status.ct is not none %}
+{% for entry in hc_check_linux_vz_ct_status.ct | sort %}
+ct:{{ entry.name }}:{{ entry['runtime_status'] }}:{{ entry['boot_status'] }}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

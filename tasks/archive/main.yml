@@ -1,0 +1,175 @@
+---
+# tasks file for health_check
+
+# build facts
+- name: "Set (custom) facts (pass #1)"
+  set_fact:
+    is_vz_container: "{% if ansible_virtualization_type == 'openvz' and ansible_virtualization_role == 'guest' %}true{% else %}false{% endif %}"
+    is_docker_container: "{% if ansible_virtualization_type == 'docker' and ansible_virtualization_role == 'guest' %}true{% else %}false{% endif %}"
+    is_kvm_guest: "{% if (ansible_virtualization_type == 'kvm') and ansible_virtualization_role == 'guest' %}true{% else %}false{% endif %}"
+    is_centos5: "{% if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '5' %}true{% else %}false{% endif %}"
+    is_centos: "{% if ansible_distribution == 'CentOS' %}true{% else %}false{% endif %}"
+    is_debian: "{% if ansible_os_family == 'Debian' %}true{% else %}false{% endif %}"
+    is_kali: "{% if ansible_os_family == 'Kali GNU/Linux' %}true{% else %}false{% endif %}"
+    is_ubuntu: "{% if ansible_distribution == 'Ubuntu' %}true{% else %}false{% endif %}"
+    is_fedora: "{% if ansible_distribution == 'Fedora' %}true{% else %}false{% endif %}"
+    is_suse: "{% if ansible_os_family == 'Suse' %}true{% else %}false{% endif %}"
+    is_arch: "{% if ansible_os_family == 'Archlinux' %}true{% else %}false{% endif %}"
+
+- name: "Set (custom) facts (pass #2)"
+  set_fact:
+    is_container: "{% if is_vz_container == true or is_docker_container == true %}true{% else %}false{% endif %}"
+
+- name: "Do config for check_linux_burp_backup?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_burp_backup'] }}"
+  when: (has_hc_burp is defined) and has_hc_burp
+- name: "Do config for check_linux_es_status?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_es_status'] }}"
+  when: (has_hc_elk is defined) and has_hc_elk
+- name: "Do config for check_linux_file_age/check_linux_file_change?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_file_age', 'check_linux_file_change'] }}"
+  when: (has_hc_file is defined) and has_hc_file
+- name: "Do config for check_linux_fs_usage?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_fs_usage'] }}"
+  when: (has_hc_fs is defined) and has_hc_fs
+- name: "Do config for check_linux_hpacucli?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_hpacucli'] }}"
+  when: (has_hc_hpacu is defined) and has_hc_hpacu
+- name: "Do config for check_linux_hpasmcli?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_hpasmcli'] }}"
+  when: (has_hc_hpasm is defined) and has_hc_hpasm
+- name: "Do config for check_linux_hpssacli?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_hpssacli'] }}"
+  when: (has_hc_hpssa is defined) and has_hc_hpssa
+- name: "Do config for check_linux_hplog?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_hplog'] }}"
+  when: (has_hc_hplog is defined) and has_hc_hplog
+- name: "Do config for check_linux_httpd_status?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_httpd_status'] }}"
+  when: (has_hc_httpd is defined) and has_hc_httpd
+- name: "Do config for check_linux_mysqld_status?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_mysqld_status'] }}"
+  when: (has_hc_mysqld is defined) and has_hc_mysqld
+- name: "Do config for check_linux_ntp_status?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_ntp_status'] }}"
+  when: (has_hc_ntpd is defined) and has_hc_ntpd
+- name: "Do config for check_linux_process_limits?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_process_limits'] }}"
+  when: (has_hc_process is defined) and has_hc_process
+- name: "Do config for check_linux_root_crontab?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_root_crontab'] }}"
+  when: (has_hc_root_crontab is defined) and has_hc_root_crontab
+- name: "Do config for check_linux_vz_ct_counters/check_linux_vz_ct_status?"
+  set_fact:
+    active_plugins: "{{ active_plugins|default([]) + ['check_linux_vz_ct_counters','check_linux_vz_ct_status'] }}"
+  when: (has_hc_vz is defined) and has_hc_vz
+
+# install software
+
+- name: "Update APT cache"
+  apt:
+   update_cache: yes
+  when: is_debian or is_kali
+
+# -- core
+- include: add_core.yml
+  when:
+    - (hc_state is defined) and hc_state != "absent"
+    - not is_centos5
+# --core (CentOS5)
+- include: add_core_yum.yml
+  when:
+    - (hc_state is defined) and hc_state != "absent"
+    - is_centos5
+
+# -- platform
+- include: add_platform_plugins.yml
+  when:
+    - (hc_state is defined) and hc_state != "absent"
+    - not is_centos5
+# -- platform (CentOS 5)
+- include: add_platform_plugins_yum.yml
+  when:
+    - (hc_state is defined) and hc_state != "absent"
+    - is_centos5
+
+#  deploy cron jobs
+
+- include: add_cron.yml
+  when:
+    - (hc_state is defined) and hc_state != "absent"
+    - (set_hc_cron is defined) and set_hc_cron
+    - not is_centos5
+- include: add_cron_yum.yml
+  when:
+    - (hc_state is defined) and hc_state != "absent"
+    - (set_hc_cron is defined) and set_hc_cron
+    - is_centos5
+
+# deploy configuration
+
+- include: set_plugin_config.yml
+  with_items: "{{ active_plugins }}"
+  when:
+    - (set_hc_plugin_config is defined) and set_hc_plugin_config
+    - (hc_state is defined) and hc_state != "absent"
+    - active_plugins is defined
+
+- include: set_core_vars.yml
+  when: 
+    - (check_health.core is defined) and check_health.core
+    - (hc_state is defined) and hc_state != "absent"
+
+- include: set_check_host.yml
+  when:
+    - (check_health.check_host is defined) and check_health.check_host
+    - (hc_state is defined) and hc_state != "absent"
+
+# remove cron jobs
+
+- include: del_cron.yml
+  when:
+    - (set_hc_cron is defined) and set_hc_cron
+    - not is_centos5
+- include: del_cron_yum.yml
+  when:
+    - (set_hc_cron is defined) and set_hc_cron
+    - is_centos5
+
+# de-install software
+
+# --platform
+- include: del_platform_plugins.yml
+  when:
+    - (hc_state is defined) and hc_state == "absent"
+    - not is_centos5
+- include: del_platform_plugins.yml
+  when:
+    - (hc_state is defined) and hc_state == "absent"
+    - is_centos5
+# -- core
+- include: del_core.yml
+  when:
+    - (hc_state is defined) and hc_state == "absent"
+    - not is_centos5
+- include: del_core.yml
+  when:
+    - (hc_state is defined) and hc_state == "absent"
+    - is_centos5
+
+# set log-healthy
+- include: set_log_healthy.yml
+  when: (set_log_healthy is defined) and set_log_healthy

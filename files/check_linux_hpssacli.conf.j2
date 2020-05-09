@@ -1,0 +1,37 @@
+#******************************************************************************
+# @(#) check_linux_hpssacli.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_hpssacli HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_hpssacli.log_healthy | default('no') }}"
+
+# location of 'hpssacli' tool
+# [default: /usr/sbin/hpssacli]
+hpssacli_bin="{{ hc_check_linux_hpssacli.hpssacli_bin | default('/usr/sbin/hpssacli') }}"
+
+# controller all show status (0=off, 1=on)
+# [default: 1]
+do_ssa_controller={{ hc_check_linux_hpssacli.do_ssa_controller | default('1') }}
+
+# controller slot=X enclosure all show (0=off, 1=on)
+# [default: 1]
+do_ssa_enclosure={{ hc_check_linux_hpssacli.do_ssa_enclosure | default('1') }}
+
+# controller slot=X physicaldrive all show status (0=off, 1=on)
+# [default: 1]
+do_ssa_physical={{ hc_check_linux_hpssacli.do_ssa_physical | default('1') }}
+
+# controller slot=X logicaldrive all show status (0=off, 1=on)
+# [default: 1]
+do_ssa_logical={{ hc_check_linux_hpssacli.do_ssa_logical | default('1') }}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

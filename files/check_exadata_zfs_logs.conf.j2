@@ -1,0 +1,60 @@
+#******************************************************************************
+# @(#) check_exadata_zfs_logs.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_exadata_zfs_logs HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_exadata_zfs_logs.log_healthy | default('no') }}"
+
+# specify the user account for the SSH session to the ZFS appliance(s)
+# [default: root]
+ssh_user="{{ hc_check_exadata_zfs_logs.ssh_user | default('root') }}"
+
+# specify the private key file for the SSH session to the ZFS appliance(s)
+# [default: ~root/.ssh/id_rsa]
+ssh_key_file="{{ hc_check_exadata_zfs_logs.ssh_key_file | default('~root/.ssh/id_rsa') }}"
+
+# specify additional options for the SSH session to the ZFS appliance(s)
+# [default: null]
+ssh_opts="{{ hc_check_exadata_zfs_logs.ssh_opts | default('') }}"
+
+# specify the ZFS hostname(s), log name(s) & alert levels. Filters
+# should be comma-separated. Following logs are supported (filters in brackets)
+#  alert (critical,major,minor)
+#  fltlog (critical,major,minor)
+#  system (error)
+#  scrk (failed)
+# Format:
+#  zfs:<host_name>:<alert|fltlog|audit|scrk|system>:<minor,major,critical>]
+# Examples:
+# check all major events in the fltlog on myzfs1
+# zfs:myzfs1:fltlog:major
+# check for all major & critical events in the audit and fltlog on myzfs2
+# zfs:myzfs2:audit:major,critical
+# zfs:myzfs2:fltlog:major,critical
+{% if hc_check_exadata_zfs_logs.hosts is defined and hc_check_exadata_zfs_logs.hosts is not none %}
+{% for entry in hc_check_exadata_zfs_logs.hosts | sort %}
+{% if entry.alert is defined and entry.alert is not none %}
+zfs:{{ entry.name }}:alert:{{ entry.alert | default('critical') }}
+{% endif %}
+{% if entry.fltlog is defined and entry.fltlog is not none %}
+zfs:{{ entry.name }}:fltlog:{{ entry.fltlog | default('critical') }}
+{% endif %}
+{% if entry.audit is defined and entry.audit is not none %}
+zfs:{{ entry.name }}:audit:{{ entry.audit | default('critical') }}
+{% endif %}
+{% if entry.scrk is defined and entry.scrk is not none %}
+zfs:{{ entry.name }}:scrk:{{ entry.scrk | default('critical') }}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

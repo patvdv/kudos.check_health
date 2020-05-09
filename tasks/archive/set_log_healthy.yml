@@ -1,0 +1,10 @@
+---
+# tasks file for health_check
+
+- name: "Set log_healthy parameter"
+  replace:
+    path: "{{ item }}"
+    regexp: '^log_healthy=["]?no["]?$'
+    replace: 'log_healthy="yes"'
+  loop: "{{ lookup('fileglob', '/etc/opt/hc/*.conf', wantlist=True) }}"
+  when: (set_log_healthy is defined) and set_log_healthy

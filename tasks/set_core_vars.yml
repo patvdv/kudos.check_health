@@ -1,0 +1,10 @@
+---
+# tasks file for health_check
+- name: "Configure /etc/opt/hc/core/check_health.conf"
+  template:
+    src: files/check_health.conf.j2
+    dest: /etc/opt/hc/core/check_health.conf
+  when: 
+    - (hc_core is defined) and hc_core
+    - (hc_core.installed is defined) and hc_core.installed | bool
+  tags: core_vars

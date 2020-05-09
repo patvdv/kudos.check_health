@@ -1,0 +1,29 @@
+#******************************************************************************
+# @(#) check_hpux_file_age.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_hpux_file_age HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_hpux_file_age.log_healthy | default('no') }}"
+
+# specify file details
+# Format:
+#   file:<file_path>:<max_age_minutes_since_last_change>
+# Examples:
+#file:/var/log/messages:60
+#file:/var/log/ntp.log:30
+{% if hc_check_hpux_file_age.file is defined and hc_check_hpux_file_age.file is not none %}
+{% for entry in hc_check_hpux_file_age.file | sort(attribute='name') %}
+file:{{ entry.name }}:{{ entry['max_age'] }}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

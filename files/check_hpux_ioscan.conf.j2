@@ -1,0 +1,29 @@
+#******************************************************************************
+# @(#) check_hpux_ioscan.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_hpux_ioscan HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_hpux_ioscan.log_healthy | default('no') }}"
+
+# comma-separated list of HW device classes that should be checked
+# [default: ctl,diag,disk,ext_bus,fc,fcp,i2o,ipmi,lan,lvm,olar,vxvm]
+ioscan_classes="{{ hc_check_hpux_ioscan.ioscan_classes | default('ctl,diag,disk,ext_bus,fc,fcp,i2o,ipmi,lan,lvm,olar,vxvm') }}"
+
+# specify whether ioscan needs to be run in kernel-cached or not (yes|no)
+# [default: yes]
+kernel_mode="{{ hc_check_hpux_ioscan.kernel_mode | default('yes') }}"
+
+# specify whether ioscan needs to report in Agile view or not (yes|no)
+# [default: yes]
+agile_view="{{ hc_check_hpux_ioscan.agile_view | default('yes') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

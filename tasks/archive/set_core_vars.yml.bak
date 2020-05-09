@@ -1,0 +1,28 @@
+---
+# tasks file for health_check
+- name: "Verify core variables (/etc/opt/hc/core/check_health.conf)"
+  stat:
+    path: "/etc/opt/hc/core/check_health.conf"
+  register: check_file
+  tags: core_vars
+
+- name: "Check if exists? (etc/opt/hc/core/check_health.conf)"
+  copy:
+    remote_src: true
+    src: "/etc/opt/hc/core/check_health.conf.dist"
+    dest: "/etc/opt/hc/core/check_health.conf"
+  when: check_file.stat.exists == false
+  tags: core_vars
+
+- name: "Set core configuration (/tc/opt/hc/core/check_health.conf)"
+  lineinfile:
+    path: "/etc/opt/hc/core/check_health.conf"
+    regex: '^{{ item.name }}'
+    line: "{{ item.name }}=\"{{ item.value }}\""
+    state: present
+    insertbefore: '^$'
+    firstmatch: no
+  with_items: "{{ set_hc_core_vars }}"
+  when:
+    - set_hc_core_vars is defined
+  tags: core_vars

@@ -1,0 +1,19 @@
+---
+# tasks file for health_check
+
+# HC display plugins
+- name: "Remove display plugins (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-display-csv
+    - hc-display-terse
+    - hc-display-json
+    - hc-display-init
+    - hc-display-zenoss
+
+# HC notify plugins
+- name: "Remove notify plugins (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-notify-eif
+    - hc-notify-sms

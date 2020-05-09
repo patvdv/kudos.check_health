@@ -1,0 +1,25 @@
+#******************************************************************************
+# @(#) check_hpux_syslog.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_hpux_syslog HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_hpux_syslog.log_healthy | default('no') }}"
+
+# path to the SYSLOG file
+# [default: /var/adm/syslog/syslog.log]
+syslog_file="{{ hc_check_hpux_syslog.syslog_file | default('/var/adm/syslog/syslog.log') }}"
+
+# comma-separated list of tags to search for (case insensitive) (see man 1 logger)
+# [default: vmunix]
+syslog_classes="{{ hc_check_hpux_syslog.syslog_classes | default('vmunix') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

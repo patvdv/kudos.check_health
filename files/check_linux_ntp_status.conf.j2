@@ -1,0 +1,33 @@
+#******************************************************************************
+# @(#) check_linux_ntp_status.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_ntp_status HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_ntp_status.log_healthy | default('no') }}"
+
+# whether to force the use of chronyd?
+# [default: no]
+force_chrony="{{ hc_check_linux_ntp_status.force_chrony | default('no') }}"
+
+# whether to force the use of ntpd?
+# [default: no]
+force_ntp="{{ hc_check_linux_ntp_status.force_ntp | default('no') }}"
+
+# maximum allowed offset (in milliseconds (positive integers only)
+# [default: 500]
+max_offset={{ hc_check_linux_ntp_status.max_offset | default('500') }}
+
+# use IPv4 for ntpq
+# [default: no]
+ntpq_use_ipv4="{{ hc_check_linux_ntp_status.ntpq_use_ipv4 | default('no') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

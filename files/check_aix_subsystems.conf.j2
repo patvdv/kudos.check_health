@@ -1,0 +1,33 @@
+#******************************************************************************
+# @(#) check_aix_subsystems.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_aix_subsystems HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_aix_subsystems.log_healthy | default('no') }}"
+
+# list of required active subsystems
+# Format:
+#  subsys:<subsystem_name>
+# Examples:
+#subsys:sendmail
+#subsys:syslogd
+#subsys:portmap
+#subsys:IBM.ServiceRM
+#subsys:IBM.DRM
+#subsys:IBM.CSMAgentRM
+{% if hc_check_aix_subsystems.subsys is defined and hc_check_aix_subsystems.subsys is not none %}
+{% for entry in hc_check_aix_subsystems.subsys | sort %}
+subsys:{{ entry }}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

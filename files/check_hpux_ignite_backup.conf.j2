@@ -1,0 +1,25 @@
+#******************************************************************************
+# @(#) check_hpux_ignite_backup.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_hpux_ignite_backup HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_hpux_ignite_backup.log_healthy | default('no') }}"
+
+# maximum days before backup gets flagged as 'too old'
+# [default: 14]
+backup_age={{ hc_check_hpux_ignite_backup.backup_age | default('14') }}
+
+# list of hosts to exclude from the check (comma-separated list)
+# [default: none]
+exclude_hosts="{{ hc_check_hpux_ignite_backup.exclude_hosts | default('') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

@@ -1,0 +1,19 @@
+---
+# tasks file for health_check
+
+# HC core (platform)
+# (split-off to circumvent problems with Debian installations)
+- name: "Remove core (platform)"
+  package:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - hc-linux-platform
+
+# HC core
+- name: "Remove core"
+  package:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - hc-linux

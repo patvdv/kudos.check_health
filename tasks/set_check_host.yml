@@ -1,0 +1,18 @@
+---
+# tasks file for health_check
+- name: "Get desired state for /etc/opt/hc/check_host.conf"
+  # compile list of check_host entries
+  set_fact: 
+    hc_ds_check_host: "{{ hc_ds_check_host | default([]) + [item] }}"
+  loop: "{{ hc_plugins | sort }}"
+  when:
+    - (hc_plugins is defined) and hc_plugins
+    - (vars[item]['check_host'].active is defined) and vars[item]['check_host'].active | bool
+  tags: check_host
+
+- name: "Configure /etc/opt/hc/check_host.conf"
+  template:
+    src: files/check_host.conf.j2
+    dest: /etc/opt/hc/check_host.conf
+  # no when clause to make sure check_host.conf gets emptied when hc_ds_check_host is null
+  tags: check_host

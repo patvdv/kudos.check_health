@@ -1,0 +1,69 @@
+#******************************************************************************
+# @(#) check_exadata_zfs_share_replication.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_exadata_zfs_share_replication HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_exadata_zfs_share_replication.log_healthy | default('no') }}"
+
+# specify the user account for the SSH session to the ZFS appliance(s)
+# [default: root]
+ssh_user="{{ hc_check_exadata_zfs_share_replication.ssh_user | default('root') }}"
+
+# specify the private key file for the SSH session to the ZFS appliance(s)
+# [default: ~root/.ssh/id_rsa]
+ssh_key_file="{{ hc_check_exadata_zfs_share_replication.ssh_key_file | default('~root/.ssh/id_rsa') }}"
+
+# specify additional options for the SSH session to the ZFS appliance(s)
+# [default: null]
+ssh_opts="{{ hc_check_exadata_zfs_share_replication.ssh_opts | default('') }}"
+
+# specify the maximum replication in seconds (general threshold)
+# [default: 300]
+max_replication_lag="{{ hc_check_exadata_zfs_share_replication.max_replication_lag | default('300') }}"
+
+# specify the ZFS hostname(s), replication name(s) and their maximum lag (in seconds)
+# When not defining a threshold for a given share, the general threshold will
+# be used (see above). When defining a threshold of 0 (zero), then the check
+# will for this given share will be skipped (this allows for exclusion of shares)
+# In order to check share(s) for a given ZFS appliance at least one configuration
+# entry must be present: either a wildcard or custom entry.
+# Caveat: any share must finally resolve to one entry only.
+# Format:
+#  zfs:<host_name>:<replication_name|*>:<true|false|*>:<success|failed|*>:[<max_replication_lag>]:[day1,day2,..|*>]:[<hour|<start_hour-end_hour>|*>]
+#
+#   <day>: 3 letter day name (case insensitive)
+#   <hour>: 24 hours notation (start and end hours are inclusive)
+#
+# Examples:
+# check rep_share1 on myzfs1 with a custom threshold of 300 seconds on every day of the week
+# zfs:myzfs1:rep_share1:*:*:600:*
+# check all shares of myzfs2 with a custom threshold of 1200 seconds on Sunday and Monday
+# zfs:myzfs2:*:*:*:1200:Sun,Mon
+# check all shares of myzfs3 with the general threshold but only on Friday between 7am-10m
+# zfs:myzfs3:*:*:*:Fri:07-10
+# disable all shares of myzfs4 from checking
+# zfs:myzfs4:*:*:*:0:*
+# disable check of rep_share7 on myzfs5
+# zfs:myzfs5:rep_share7:*:*:0:*
+# check that rep_share4 on myzfs6 is inactive (every day of the week)
+# zfs:myzfs6:rep_share4:false:*:*
+{% if hc_check_exadata_zfs_share_replication.hosts is defined and hc_check_exadata_zfs_share_replication.hosts is not none %}
+{% for host_entry in hc_check_exadata_zfs_share_replication.hosts | sort %}
+{% if host_entry.shares is defined and host_entry.shares is not none %}
+{% for share_entry in host_entry.shares | sort %}
+zfs:{{ host_entry.name }}:{{ share_entry.name }}:{{ share_entry['replicated'] | default('') }}:{{ share_entry['state'] | default('') }}:{{ share_entry['max_replication_lag'] | default('') }}:{{ share_entry['days'] | default('') }}:{{ share_entry['hours'] | default('') }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

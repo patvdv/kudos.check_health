@@ -1,0 +1,31 @@
+---
+# tasks file for health_check
+- name: "Verify check_host.conf"
+  stat:
+    path: "/etc/opt/hc/check_host.conf"
+  register: check_file
+
+- name: "Copy check_host.conf"
+  copy:
+    remote_src: true
+    src: "/etc/opt/hc/check_host.conf.dist"
+    dest: "/etc/opt/hc/check_host.conf"
+  when: check_file.stat.exists == false
+
+- name: "Reset plugin configuration"
+  lineinfile:
+    path: "/etc/opt/hc/check_host.conf"
+    regex: '^hc:'
+    state: absent
+
+- name: "Add plugin configuration"
+  lineinfile:
+    path: "/etc/opt/hc/check_host.conf"
+    firstmatch: no
+    insertafter: '^(# \[hc:|hc:)'
+    regex: '^hc:{{ item.name }}'
+    line: "hc:{{ item.name }}:{{ item.config_file }}:{{ item.title }}:{{ item.timeout }}"
+    state: present
+  with_items: "{{ set_hc_check_plugins }}"
+  when:
+    - set_hc_check_plugins is defined

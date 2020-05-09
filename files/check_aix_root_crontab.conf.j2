@@ -1,0 +1,30 @@
+#******************************************************************************
+# @(#) check_aix_root_crontab.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_aix_root_crontab HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_aix_root_crontab.log_healthy | default('no') }}"
+
+# list of commands (or strings) that should appear in active cron entries
+# Format:
+#  cron:<cron_entry>
+# Examples:
+#cron:/opt/cfg2html/bin/cfg2html_aix.sh
+#cron:/usr/local/bin/run_aix_system_backup.sh
+#cron:/usr/bin/nmon
+{% if hc_check_aix_root_crontab.jobs is defined and hc_check_aix_root_crontab.jobs is not none %}
+{% for entry in hc_check_aix_root_crontab.jobs | sort %}
+cron:{{ entry }}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

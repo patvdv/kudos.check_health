@@ -1,0 +1,63 @@
+#******************************************************************************
+# @(#) check_exadata_zfs_share_usage.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_exadata_zfs_share_usage HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_exadata_zfs_share_usage.log_healthy | default('no') }}"
+
+# specify the user account for the SSH session to the ZFS appliance(s)
+# [default: root]
+ssh_user="{{ hc_check_exadata_zfs_share_usage.ssh_user | default('root') }}"
+
+# specify the private key file for the SSH session to the ZFS appliance(s)
+# [default: ~root/.ssh/id_rsa]
+ssh_key_file="{{ hc_check_exadata_zfs_share_usage.ssh_key_file | default('~root/.ssh/id_rsa') }}"
+
+# specify additional options for the SSH session to the ZFS appliance(s)
+# [default: null]
+ssh_opts="{{ hc_check_exadata_zfs_share_usage.ssh_opts | default('') }}"
+
+# specify the maximum % of space usage a share may reach (general threshold)
+# [default: 90]
+max_space_usage={{ hc_check_exadata_zfs_share_usage.max_space_usage | default('90') }}
+
+# specify the ZFS hostname(s), project+share name(s) and their maximum usage (in %)
+# When not defining a threshold for a given share, the general threshold will
+# be used (see above). When defining a threshold of 0 (zero), then the check
+# will for this given share will be skipped (this allows for exclusion of shares)
+# In order to check share(s) for a given ZFS appliance at least one configuration
+# entry must be present: either a wildcard or custom entry.
+# Caveat: any share must finally resolve to one entry only.
+# Format:
+#  zfs:<host_name>:<project_name|*>:<share_name|*>:[<usage_threshold_%>]
+# Examples:
+# check share1 of projectX on myzfs1 with a custom threshold of 75%
+# zfs:myzfs1:projectX:share1:75
+# check all shares of myzfs2 with a custom threshold of 85%
+# zfs:myzfs2:*:*:85
+# check all shares of myzfs3 with the general threshold
+# zfs:myzfs3:*:*:
+# disable all shares of myzfs4 from checking
+# zfs:myzfs4:*:*:0
+# disable check of share7 of projectY on myzfs5
+# zfs:myzfs5:projectY:share7:0
+{% if hc_check_exadata_zfs_share_usage.hosts is defined and hc_check_exadata_zfs_share_usage.hosts is not none %}
+{% for host_entry in hc_check_exadata_zfs_share_usage.hosts | sort %}
+{% if host_entry.shares is defined and host_entry.shares is not none %}
+{% for share_entry in host_entry.shares | sort %}
+zfs:{{ host_entry.name }}:{{ share_entry.project }}:{{ share_entry.name }}:{{ share_entry['max_space_usage'] | default('') }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

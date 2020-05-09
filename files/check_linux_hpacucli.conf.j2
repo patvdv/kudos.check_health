@@ -1,0 +1,37 @@
+#******************************************************************************
+# @(#) check_linux_hpacucli.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_hpacucli HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_hpacucli.log_healthy | default('no') }}"
+
+# location of 'hpacucli' tool
+# [default: /usr/sbin/hpacucli]
+hpacucli_bin="{{ hc_check_linux_hpacucli.hpacucli_bin | default('no') }}"
+
+# controller all show status (0=off, 1=on)
+# [default: 1]
+do_acu_controller={{ hc_check_linux_hpacucli.do_acu_controller | default('1') }}
+
+# controller slot=X enclosure all show (0=off, 1=on)
+# [default: 1]
+do_acu_enclosure={{ hc_check_linux_hpacucli.do_acu_enclosure | default('1') }}
+
+# controller slot=X physicaldrive all show status (0=off, 1=on)
+# [default: 1]
+do_acu_physical={{ hc_check_linux_hpacucli.do_acu_physical | default('1') }}
+
+# controller slot=X logicaldrive all show status (0=off, 1=on)
+# [default: 1]
+do_acu_logical={{ hc_check_linux_hpacucli.do_acu_logical | default('1') }}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

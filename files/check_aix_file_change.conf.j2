@@ -1,0 +1,46 @@
+#******************************************************************************
+# @(#) check_aix_file_change.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_aix_file_change HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_aix_file_change.log_healthy | default('no') }}"
+
+# name of the state file to use (will be relative to /var/opt/hc/state/persistent
+# [default: discovered.file_change]
+state_file=discovered.file_change
+
+# specify if file names need to be checked/flagged for meta characters [yes|no]
+# [default: yes]
+do_meta_check="{{ hc_check_aix_file_change.do_meta_check | default('yes') }}"
+
+# specify files or directories check (directories are automatically expanded)
+# format:
+# incl:<full path> (includes a path)
+# excl:<full path> (excludes a path)
+# note: shell wild cards in the file paths are not supported! Exclusions have
+#       a higher priority than inclusions.
+# Examples:
+#incl:file1
+#incl:dir1
+#excl:dir1/file2
+{% if hc_check_aix_file_change.incl is defined and hc_check_aix_file_change.incl is not none %}
+{% for entry in hc_check_aix_file_change.incl | sort %}
+incl:{{ entry }}
+{% endfor %}
+{% endif %}
+{% if hc_check_aix_file_change.excl is defined and hc_check_aix_file_change.excl is not none %}
+{% for entry in hc_check_aix_file_change.excl %}
+excl:{{ entry }}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

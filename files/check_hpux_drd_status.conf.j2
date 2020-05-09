@@ -1,0 +1,33 @@
+#******************************************************************************
+# @(#) check_hpux_drd_status.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_hpux_drd_status HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_hpux_drd_status.log_healthy | default('no') }}"
+
+# check clone age? (yes|no)
+# [default: yes]
+check_clone="{{ hc_check_hpux_drd_status.check_clone | default('yes') }}"
+
+# maximum days before the drd clone gets flagged as 'too old'
+# [default: 30]
+clone_age={{ hc_check_hpux_drd_status.clone_age | default('30') }}
+
+# check sync age? (yes|no)
+# [default: yes]
+check_sync="{{ hc_check_hpux_drd_status.check_sync | default('yes') }}"
+
+# maximum days before the drd sync gets flagged as 'too old'
+# [default: 30]
+sync_age={{ hc_check_hpux_drd_status.sync_age | default('30') }}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

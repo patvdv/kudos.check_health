@@ -1,0 +1,19 @@
+galaxy_info:
+  author: Patrick Van der Veken
+  description: your description
+  company: KUDOS BVBA
+
+  # If the issue tracker for your role is not on github, uncomment the
+  # next line and provide a value
+  # issue_tracker_url: http://example.com/issue/tracker
+
+  license: license (GPLv3)
+
+  min_ansible_version: 2.5
+
+  galaxy_tags:
+    - health check
+    - monitoring
+    - shell
+
+dependencies: []

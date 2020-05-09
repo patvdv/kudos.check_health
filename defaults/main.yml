@@ -1,0 +1,27 @@
+---
+# defaults file for health_check
+
+# (core) configuration parameters
+hc_core:
+  installed: "yes"
+  time_out: 60
+  log_healthy: "no"
+  will_fix: "no"
+  report_last_cache: "yes"
+  report_today_cache: "yes"
+
+# (plugin) configuration parameters
+hc_display_csv:
+  installed: "yes"
+hc_display_init:
+  installed: "yes"
+hc_display_json:
+  installed: "yes"
+hc_display_terse:
+  installed: "yes"
+hc_display_zenoss:
+  installed: "yes"
+hc_notify_eif:
+  installed: "yes"
+hc_notify_sms:
+  installed: "yes"

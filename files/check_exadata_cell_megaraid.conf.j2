@@ -1,0 +1,58 @@
+#******************************************************************************
+# @(#) check_exadata_cell_megaraid.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_exadata_cell_megaraid HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_exadata_cell_megaraid.log_healthy | default('no') }}"
+
+# specify the user account for the dcli session to the cell server
+# [default: root]
+dcli_user="{{ hc_check_exadata_cell_megaraid.dcli_user | default('root') }}"
+
+# specify the cell servers to query
+# [default: null]
+cell_servers="{{ hc_check_exadata_cell_megaraid.cell_servers | default('') }}"
+
+# specify whether to check the controller state (yes|no)
+# [default: yes]
+check_controller="{{ hc_check_exadata_cell_megaraid.check_controller | default('yes') }}"
+
+# specify whether to check the BBU (battery) state (yes|no)
+# [default: yes]
+check_bbu="{{ hc_check_exadata_cell_megaraid.check_bbu | default('yes') }}"
+
+# specify whether to check the BBU (supercap) state (yes|no)
+# [default: yes]
+check_supercap="{{ hc_check_exadata_cell_megaraid.check_supercap | default('yes') }}"
+
+# specify whether to check the physical devices (yes|no)
+# [default: yes]
+check_physical="{{ hc_check_exadata_cell_megaraid.check_physical | default('yes') }}"
+
+# specify whether to check the virtual devices (yes|no)
+# [default: yes]
+check_virtual="{{ hc_check_exadata_cell_megaraid.check_virtual | default('yes') }}"
+
+# individual checks that should be disabled (wildcards are not supported)
+#  cell_exclude:<cell_server>:<controller|bbu|supercap|physical|virtual>
+# Examples:
+# disable controller check on mycell1
+# cell_exclude:mycell1:controller
+# disable bbu check on mycell2
+# cell_exclude:mycell2:bbu
+{% if hc_check_exadata_cell_megaraid.cell_exclude is defined and hc_check_exadata_cell_megaraid.cell_exclude is not none %}
+{% for entry in hc_check_exadata_cell_megaraid.cell_exclude | sort %}
+cell_exclude:{{ entry['cell_server'] }}:{{ entry['disable_check'] }}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

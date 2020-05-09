@@ -1,0 +1,22 @@
+#******************************************************************************
+# @(#) notify_eif.conf [release >=20200418]
+#******************************************************************************
+# This is the configuration file for the notify_eif.sh provider.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# --- EIF settings ---
+# location of the posteifmsg tool
+EIF_BIN="{{ hc_notify_eif.eif_bin | default('/opt/eif/bin/posteifmsg') }}"
+
+# location of the posteifmsg configuration file
+EIF_ETC="{{ hc_notify_eif.eif_etc | default('/etc/opt/eif/posteifmsg.conf') }}"
+
+# default ITM severity
+EIF_SEVERITY="{{ hc_notify_eif.eif_severity | default('MINOR') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

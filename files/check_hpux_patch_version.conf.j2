@@ -1,0 +1,33 @@
+#******************************************************************************
+# @(#) check_hpux_patch_version.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_hpux_patch_version HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_hpux_patch_version.log_healthy | default('no') }}"
+
+# OE version that should be checked (version string as displayed by 'swlist')
+# [default: none]
+required_oe="{{ hc_check_hpux_patch_version.required_oe | default('') }}"
+
+# comma-separated list of SD patches that should be checked
+# [default: none]
+required_patches="{{ hc_check_hpux_patch_version.required_patches | default('') }}"
+
+# check that all installed filesets are configured?
+# [default: yes]
+check_filesets="{{ hc_check_hpux_patch_version.check_filesets | default('yes') }}"
+
+# list of filesets to exclude from the check (comma-separated list)
+# [default: none]
+exclude_filesets="{{ hc_check_hpux_patch_version.exclude_filesets | default('yes') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

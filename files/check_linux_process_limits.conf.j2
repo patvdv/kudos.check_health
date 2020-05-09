@@ -1,0 +1,57 @@
+#******************************************************************************
+# @(#) check_linux_process_limits.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_process_limits HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_process_limits.log_healthy | default('no') }}"
+
+# -- user stanzas --
+# supported limit checks: Max open files; Max processes
+# format:
+# user:<user name>;<limit name>;<soft threshold in %>;<hard threshold in %>
+# note: <limit name> must exactly match the descriptor in /proc/<PID>/limits
+#       thresholds are optional (will not be checked when not specified)
+# Examples:
+#user;postfix;Max open files;;75
+{% if hc_check_linux_process_limits.limits is defined and hc_check_linux_process_limits.limits is not none %}
+{% for entry in hc_check_linux_process_limits.limits | sort %}
+{% if entry.user is defined and entry.user is not none %}
+{% if entry.values is defined and entry.values is not none %}
+user;{{ entry.user }};{{ entry.name }};{{ entry['values']['soft'] | default('') }};{{ entry['values']['hard'] | default('') }}
+{% else %}
+user;{{ entry.user }};{{ entry.name }};;
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+# -- process stanzas --
+# supported limit checks: Max open files
+# format:
+# process:<process name>;<limit name>;<soft threshold in %>;<hard threshold in %>
+# note: <limit name> must exactly match the descriptor in /proc/<PID>/limits
+#       thresholds are optional (will not be checked when not specified)
+# Examples:
+#process;nfsd;Max open files;100;80
+{% if hc_check_linux_process_limits.limits is defined and hc_check_linux_process_limits.limits is not none %}
+{% for entry in hc_check_linux_process_limits.limits | sort %}
+{% if entry.process is defined and entry.process is not none %}
+{% if entry.values is defined and entry.values is not none %}
+process;{{ entry.process }};{{ entry.name }};{{ entry['values']['soft'] | default('') }};{{ entry['values']['hard'] | default('') }}
+{% else %}
+process;{{ entry.process }};{{ entry.name }};;
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

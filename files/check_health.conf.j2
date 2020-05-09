@@ -1,0 +1,42 @@
+#******************************************************************************
+# @(#) check_health.conf [release >=20200418]
+#******************************************************************************
+# This is the main configuration file for the check_health.sh tool.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# --- general settings ---
+# maximum timeout for HC calls/plugins (seconds)
+# [default: 60]
+HC_TIME_OUT={{ hc_core.time_out | default('60') }}
+
+# enable/disable logging of passed health checks (warning: this may rapidly grow the HC log)
+# see also: '--log-healthy' command-line parameter
+#           'log_healthy' setting in HC plugin configuration file(s)
+# [values: Yes|No]
+# [default: No]
+HC_LOG_HEALTHY="{{ hc_core.log_healthy | default('No') }}"
+
+# enable/disable healing logic if available in HC plugin(s)
+# see also: '--no-fix' command-line parameter
+# [values: Yes|No]
+# [default: No]
+HC_WILL_FIX="{{ hc_core.will_fix | default('No') }}"
+
+# cache "last" reporting entries. Set to 'Yes' to speed up reporting of the last
+# registered HC events
+# [values: Yes|No]
+# [default: No]
+HC_REPORT_CACHE_LAST="{{ hc_core.report_last_cache | default('No') }}"
+
+# cache "today" reporting entries.  Set to 'Yes' to speed up reporting of today's
+# registered HC events
+# [values: Yes|No]
+# [default: No]
+HC_REPORT_CACHE_TODAY="{{ hc_core.report_today_cache | default('No') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

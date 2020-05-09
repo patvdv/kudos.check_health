@@ -1,0 +1,29 @@
+#******************************************************************************
+# @(#) check_exadata_cell_luns.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_exadata_cell_luns HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_exadata_cell_luns.log_healthy | default('no') }}"
+
+# specify the user account for the dcli session to the cell server
+# [default: root]
+dcli_user="{{ hc_check_exadata_cell_luns.dcli_user | default('root') }}"
+
+# specify the cell servers to query
+# [default: null]
+cell_servers="{{ hc_check_exadata_cell_luns.cell_servers | default('') }}"
+
+# specify which luns to exclude from the check (comma-separated)
+# [default: null]
+excluded_luns="{{ hc_check_exadata_cell_luns.excluded_luns | default('') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

@@ -1,0 +1,119 @@
+---
+# tasks file for health_check
+# note: use double interpolation via vars[] to lookup the list item as dict
+
+- name: "Build desired state of (plugin) package(s) (#1)"
+  # compile a list of plugins that need to be present
+  set_fact:
+    hc_ds_plugins: "{{ hc_ds_plugins | default([]) + [item] }}"
+  loop: "{{ hc_plugins }}"
+  tags: package_deploy
+  when:
+    - (hc_plugins is defined) and hc_plugins
+    - ((hc_packages[os_type] is defined) and item in hc_packages[os_type]) or ((hc_extra_packages[os_type] is defined) and item in hc_extra_packages[os_type])
+    - (hc_core.installed is defined) and hc_core.installed | bool
+
+- name: "Build desired state of (plugin) package(s) (#2)"
+  # compile a list of packages that need to be present (hc_core.installed=no -> empty list)
+  set_fact:
+    hc_ds_packages: "{{ hc_ds_packages | default([]) + [hc_packages[os_type][item]] }}"
+  loop: "{{ hc_ds_plugins | default([]) }}"
+  tags: package_deploy
+  when:
+    - item in hc_packages[os_type]
+    - (hc_core.installed is defined) and hc_core.installed | bool
+
+- name: "Build desired state of (extra) package(s)"
+  # compile a list of packages that need to be present (add "extra") (hc_core.installed=no -> empty list)
+  set_fact:
+    hc_ds_packages: "{{ hc_ds_packages | default([]) + [hc_extra_packages[os_type][item]] }}"
+  loop: "{{ hc_ds_plugins | default([]) }}"
+  tags: package_deploy
+  when:
+    - (hc_extra_packages is defined) and hc_extra_packages
+    - item in hc_extra_packages[os_type]
+    - (hc_core.installed is defined) and hc_core.installed | bool
+
+- name: "Build desired state of (display/notify) package(s)"
+  # compile a list of packages that need to be present (add display + notify plugins) (hc_core.installed=no -> empty list)
+  set_fact:
+    hc_ds_packages: "{{ hc_ds_packages | default([]) + [hc_packages[os_type][item]] }}"
+  loop: "{{ hc_display_plugins + hc_notify_plugins }}"
+  tags: package_deploy
+  when:
+    - (hc_display_plugins is defined) and hc_display_plugins
+    - (hc_notify_plugins is defined) and hc_notify_plugins
+    - vars[item].installed | bool
+    - item in hc_packages[os_type]
+    - (hc_core.installed is defined) and hc_core.installed | bool
+
+- name: "Build desired state of (core) package(s)"
+  # compile a list of packages that need to be present (add core package) (hc_core.installed=no -> empty list)
+  set_fact:
+    hc_ds_packages: "{{ hc_ds_packages | default([]) + [hc_packages[os_type]['hc_core']] }}"
+  tags: package_deploy
+  when:
+    - (hc_packages[os_type]['hc_core'] is defined) and hc_packages[os_type]['hc_core']
+    - (hc_core.installed is defined) and hc_core.installed | bool
+
+- name: "Update packages (add)"
+  package:
+    name: "{{ item }}"
+    state: latest
+  when:
+    - (hc_ds_packages is defined) and hc_ds_packages
+    - (hc_core.installed is defined) and hc_core.installed | bool
+    - not is_arch
+    - not is_centos5
+  loop: "{{ hc_ds_packages | default([]) | unique | sort }}"
+  tags: package_deploy
+
+- name: "Update packages (add)"
+  command: "yum install -y -e0 -d2 {{ item }}"
+  when:
+    - (hc_ds_packages is defined) and hc_ds_packages
+    - (hc_core.installed is defined) and hc_core.installed | bool
+    - is_centos5
+  loop: "{{ hc_ds_packages | default([]) | unique | sort }}"
+  tags: package_deploy
+
+- name: "Update packages (add)"
+  pacman:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  when:
+    - (hc_ds_packages is defined) and hc_ds_packages
+    - (hc_core.installed is defined) and hc_core.installed | bool
+    - is_arch
+  loop: "{{ hc_ds_packages | default([]) | unique | sort }}"
+  tags: package_deploy
+
+- name: "Deploy packages (remove)"
+  package:
+    name: "{{ item }}"
+    state: absent
+  when:
+    - (hc_ds_packages is not defined) or ((hc_ds_packages is defined) and item not in hc_ds_packages)
+    - not is_arch
+    - not is_centos5
+  loop: "{{ hc_installed | select('match', 'hc-*') | reject('match', 'hc-cron*') | list }}"
+  tags: package_deploy
+
+- name: "Deploy packages (remove)"
+  command: "yum remove -y -e0 -d2 {{ item }}"
+  when:
+    - (hc_ds_packages is not defined) or ((hc_ds_packages is defined) and item not in hc_ds_packages)
+    - is_centos5
+  loop: "{{ hc_installed | select('match', 'hc-*') | reject('match', 'hc-cron*') | list }}"
+  tags: package_deploy
+
+- name: "Deploy packages (remove)"
+  pacman:
+    name: "{{ item }}"
+    state: absent
+  when: 
+    - (hc_ds_packages is not defined) or ((hc_ds_packages is defined) and item not in hc_ds_packages)
+    - is_arch
+  loop: "{{ hc_installed | select('match', 'hc-*') | reject('match', 'hc-cron*') | list }}"
+  tags: package_deploy

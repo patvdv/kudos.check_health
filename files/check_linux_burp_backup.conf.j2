@@ -1,0 +1,30 @@
+#******************************************************************************
+# @(#) check_linux_burp_backup.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_burp_backup HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_burp_backup.log_healthy | default('no') }}"
+
+# specify client & backup details
+# Format:
+#   client:<client_name>:<max_warnings_allowed>:<max_backup_age>(d|h|w)
+# Examples:
+#client:host1:0:10h
+#client:host2:0:2d
+#client:host3:0:5w
+{% if hc_check_linux_burp_backup.client is defined and hc_check_linux_burp_backup.client is not none %}
+{% for entry in hc_check_linux_burp_backup.client | sort %}
+client:{{ entry.name }}:{{ entry['max_warnings_allowed'] }}:{{ entry['max_backup_age'] }}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

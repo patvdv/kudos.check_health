@@ -1,0 +1,25 @@
+#******************************************************************************
+# @(#) check_linux_hplog.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_hplog HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_hplog.log_healthy | default('no') }}"
+
+# location of 'hpacucli' tool
+# [default: /sbin/hplog]
+hplog_bin="{{ hc_check_linux_hplog.hplog_bin | default('/sbin/hplog') }}"
+
+# comma-separated list of severities to search for (case insensitive)
+# [default: CRITICAL,CAUTION]
+hplog_severities="{{ hc_check_linux_hplog.hplog_severities | default('CRITICAL,CAUTION') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

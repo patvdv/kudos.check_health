@@ -1,0 +1,69 @@
+---
+# tasks file for health_check
+- name: "Find plugin configuration files"
+  find:
+    paths: /etc/opt/hc
+    patterns: '*.conf'
+    recurse: no
+    excludes: 'check_host.conf'
+  # save output, look for files.[].path entries later
+  register: hc_get_config
+  tags: plugin_config
+
+- name: "Set plugin configuration (add/update)"
+  template:
+    src: "files/{{ item }}.conf.j2"
+    dest: "/etc/opt/hc/{{ item }}.conf"
+  when:
+    - (hc_plugins is defined) and hc_plugins
+    # only update .conf file for a plugin that requires a .conf file
+    - ((hc_configs is defined) and item in hc_configs) or ((hc_extra_configs is defined) and item in hc_extra_configs)
+    - (hc_core.installed is defined) and hc_core.installed | bool
+  # remove 'hc_' bit and loop over resulting list
+  loop: "{{ hc_plugins | map('regex_replace', '^hc_', '') | list | sort }}"
+  tags: plugin_config
+
+- name: "Set plugin configuration (remove)"
+  file:
+    state: absent
+    path: "{{ item }}"
+  # loop over resulting files from 'find' command (filter for short basename first)
+  # map .path attribute here to avoid verbose hash output in the playbook run
+  loop: "{{ hc_get_config.files | map(attribute='path') | list }}"
+  # check if entry exist in the list of configured plugins (hc_plugins)
+  when:
+    - (hc_get_config.files is defined) and hc_get_config.files
+    - (item | basename | replace('.conf', '')) not in (hc_plugins | map('regex_replace', '^hc_', '') | list)
+  tags: plugin_config
+
+- name: "Set plugin configuration (notify_sms)"
+  template:
+    src: "files/notify_sms.conf.j2"
+    dest: "/etc/opt/hc/core/providers/notify_sms.conf"
+  when:
+    - (hc_notify_sms.installed is defined) and hc_notify_sms.installed | bool
+  tags: plugin_config
+
+- name: "Set plugin configuration (notify_sms)"
+  file:
+    state: absent
+    path: "/etc/opt/hc/core/providers/notify_sms.conf"
+  when:
+    - (hc_notify_sms.installed is not defined) or ((hc_notify_sms.installed is defined) and not hc_notify_sms.installed | bool)
+  tags: plugin_config
+
+- name: "Set plugin configuration (notify_eif)"
+  template:
+    src: "files/notify_eif.conf.j2"
+    dest: "/etc/opt/hc/core/providers/notify_eif.conf"
+  when:
+    - (hc_notify_eif.installed is defined) and hc_notify_eif.installed | bool
+  tags: plugin_config
+
+- name: "Set plugin configuration (notify_eif)"
+  file:
+    state: absent
+    path: "/etc/opt/hc/core/providers/notify_eif.conf"
+  when:
+    - (hc_notify_eif.installed is not defined) or ((hc_notify_eif.installed is defined) and not hc_notify_eif.installed | bool)
+  tags: plugin_config

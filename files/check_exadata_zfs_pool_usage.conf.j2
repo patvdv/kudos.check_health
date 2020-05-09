@@ -1,0 +1,62 @@
+#******************************************************************************
+# @(#) check_exadata_zfs_pool_usage.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_exadata_zfs_pool_usage HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_exadata_zfs_pool_usage.log_healthy | default('no') }}"
+
+# specify the user account for the SSH session to the ZFS appliance(s)
+# [default: root]
+ssh_user="{{ hc_check_exadata_zfs_pool_usage.ssh_user | default('root') }}"
+
+# specify the private key file for the SSH session to the ZFS appliance(s)
+# [default: ~root/.ssh/id_rsa]
+ssh_key_file="{{ hc_check_exadata_zfs_pool_usage.ssh_key_file | default('~root/.ssh/id_rsa') }}"
+
+# specify additional options for the SSH session to the ZFS appliance(s)
+# [default: null]
+ssh_opts="{{ hc_check_exadata_zfs_pool_usage.ssh_opts | default('') }}"
+
+# specify the maximum % of space usage a share may reach (general threshold)
+# [default: 90]
+max_space_usage={{ hc_check_exadata_zfs_pool_usage.max_space_usage | default('90') }}
+
+# specify the ZFS hostname(s), pool name(s) and their maximum usage (in %)
+# When not defining a threshold for a given share, the general threshold will
+# be used (see above). When defining a threshold of 0 (zero), then the check
+# will for this given pool will be skipped (this allows for exclusion of pools)
+# In order to check pool(s) for a given ZFS appliance at least one configuration
+# entry must be present: either a wildcard or custom entry.
+# Format:
+#  zfs:<host_name>:<pool_name|*>:[<usage_threshold_%>]
+# Examples:
+# check pool1 on myzfs1 with a custom threshold of 75%
+# zfs:myzfs1:pool1:75
+# check all pools of myzfs2 with a custom threshold of 85%
+# zfs:myzfs2:*:85
+# check all shares of myzfs3 with the general threshold
+# zfs:myzfs3:*:
+# disable all shares of myzfs4 from checking
+# zfs:myzfs4:*:0
+# disable check of pool7 on myzfs5
+# zfs:myzfs5:pool7:0
+{% if hc_check_exadata_zfs_pool_usage.hosts is defined and hc_check_exadata_zfs_pool_usage.hosts is not none %}
+{% for host_entry in hc_check_exadata_zfs_pool_usage.hosts | sort %}
+{% if host_entry.pools is defined and host_entry.pools is not none %}
+{% for pool_entry in host_entry.pools | sort %}
+zfs:{{ host_entry.name }}:{{ pool_entry.name }}:{{ pool_entry['max_space_usage'] | default('') }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

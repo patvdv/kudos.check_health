@@ -1,0 +1,63 @@
+#******************************************************************************
+# @(#) check_linux_mysqld_status.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_mysqld_status HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_mysqld_status.log_healthy | default('no') }}"
+
+# specify whether to perform table checks (mysqlcheck)
+# MySQL privileges required: SHOW DATABASES, SELECT (global or per database)
+# [default: yes]
+do_check="{{ hc_check_linux_mysqld_status.do_check | default('yes') }}"
+
+# specify whether the type of check to execute
+# Format: <quick|medium|extended>
+# [default: quick]
+check_type="{{ hc_check_linux_mysqld_status.check_type | default('quick') }}"
+
+# list of databases to check (comma-separated). Null value means all databases.
+# [default: null]
+check_databases="{{ hc_check_linux_mysqld_status.check_databases | default('') }}"
+
+# list of databases to excluded from checking (comma-separated).
+# overrules the 'check_databases' parameter
+# [default: null]
+exclude_databases="{{ hc_check_linux_mysqld_status.exclude_databases | default('') }}"
+
+# list of tables to excluded from checking (comma-separated)
+# (must be fully qualified names)
+# [default: null]
+exclude_tables="{{ hc_check_linux_mysqld_status.exclude_tables | default('') }}"
+
+# specify whether to gather statistics (mysqladmin) (statistics are only logged
+# when a failed HC is logged)
+# [default: yes]
+# MySQL privileges required: SHOW DATABASES, SELECT (global)
+do_stats="{{ hc_check_linux_mysqld_status.do_stats | default('yes') }}"
+
+# specify the MySQL user account (mysqlcheck/mysqlshow)
+# [default: null]
+mysql_user="{{ hc_check_linux_mysqld_status.mysql_user | default('') }}"
+
+# specify the MySQL user password (mysqlcheck/mysqlshow)
+# [default: null]
+mysql_password="{{ hc_check_linux_mysqld_status.mysql_password | default('') }}"
+
+# specify the MySQL host name (mysqlcheck/mysqlshow)
+# [default: localhost]
+mysql_host="{{ hc_check_linux_mysqld_status.mysql_host | default('localhost') }}"
+
+# specify the MySQL host port (mysqlcheck/mysqlshow)
+# [default: 3306]
+mysql_port="{{ hc_check_linux_mysqld_status.log_mysql_port | default('3306') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

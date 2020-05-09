@@ -1,0 +1,41 @@
+#******************************************************************************
+# @(#) check_linux_hpasmcli.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_hpasmcli HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_hpasmcli.log_healthy | default('no') }}"
+
+# location of 'hpasmcli' tool
+# [default: /sbin/hpasmcli]
+hpasmcli_bin="{{ hc_check_linux_hpasmcli.hpasmcli_bin | default('/sbin/hpasmcli') }}"
+
+# SHOW FANS (0=off, 1=on)
+# [default: 1]
+do_asm_fans={{ hc_check_linux_hpasmcli.do_asm_fans | default('1') }}
+
+# SHOW DIMM (0=off, 1=on)
+# [default: 1]
+do_asm_dimm={{ hc_check_linux_hpasmcli.do_asm_dimm | default('1') }}
+
+# SHOW POWERSUPPLY (0=off, 1=on)
+# [default: 1]
+do_asm_powersupply={{ hc_check_linux_hpasmcli.do_asm_powersupply | default('1') }}
+
+# SHOW SERVER (0=off, 1=on)
+# [default: 1]
+do_asm_server={{ hc_check_linux_hpasmcli.do_asm_server | default('1') }}
+
+# SHOW TEMPERATURE (0=off, 1=on)
+# [default: 1]
+do_asm_temperature={{ hc_check_linux_hpasmcli.do_asm_temperature | default('1') }}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

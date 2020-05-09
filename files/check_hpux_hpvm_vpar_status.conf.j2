@@ -1,0 +1,30 @@
+#******************************************************************************
+# @(#) check_hpux_hpvm_vpar_status.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_hpux_hpvm_vpar_status HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_hpux_hpvm_vpar_status.log_healthy | default('no') }}"
+
+# specify properties as displayed by the 'vzlist -a -H -o ctid,status,onboot' command
+# Format:
+#  [vpar:<parid>:<runtime_status>:<boot_status>]
+# runtime_status should be 'on' or 'off'
+# boot_status should be 'auto' or 'manual'
+# Examples:
+#vpar:1:on:auto
+{% if hc_check_hpux_hpvm_vpar_status.vpar is defined and hc_check_hpux_hpvm_vpar_status.vpar is not none %}
+{% for entry in hc_check_hpux_hpvm_vpar_status.vpar | sort %}
+vpar:{{ entry.name }}:{{ entry['runtime_status'] }}:{{ entry['boot_status'] }}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

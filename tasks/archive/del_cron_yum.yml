@@ -1,0 +1,161 @@
+---
+# tasks file for health_check
+
+# hc-cron-ntp-status
+- name: "Check/Remove cron job (NTP) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-ntp-status
+  when:
+    - has_hc_ntpd is not defined or (has_hc_ntpd is defined and not has_hc_ntpd)
+
+# hc-cron-named-status
+- name: "Check/Remove cron job (DNS) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-named-status
+  when:
+   - has_hc_named is not defined or (has_hc_named is defined and not has_hc_named)
+
+# hc-cron-vz-ct-counters + hc-cron-vz-ct-status
+- name: "Check/Remove cron job (OpenVZ) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-vz-ct-counters
+    - hc-cron-vz-ct-status
+  when:
+    - has_hc_vz is not defined or (has_hc_vz is defined and not has_hc_vz)
+
+# hc-cron-sshd-status
+- name: "Check/Remove cron job (SSH) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-sshd-status
+  when:
+    - has_hc_sshd is not defined or (has_hc_sshd is defined and not has_hc_sshd)
+
+# check_linux_burp_backup + check_linux_burp_status
+- name: "Check/Remove cron job (burp) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    name:
+      - hc-cron-burp-backup
+      - hc-cron-burp-status
+  when:
+    - has_hc_burp is not defined or (has_hc_burp is defined and not has_hc_burp)
+
+# check_linux_fs_mounts
+- name: "Check/Remove cron job (FS mounts/usage) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-fs-mounts
+    - hc-cron-fs-usage
+  when:
+    - has_hc_fs is not defined or (has_hc_fs is defined and not has_hc_fs)
+
+# check_linux_httpd_status
+- name: "Check/Remove cron job (HTTPD) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-httpd-status
+  when:
+    - has_hc_httpd is not defined or (has_hc_httpd is defined and not has_hc_httpd)
+
+# check_linux_mysqld_status
+- name: "Check/Remove cron job (MYSQLD) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-mysqld-status
+  when:
+    - has_hc_mysqld is not defined or (has_hc_mysqld is defined and not has_hc_mysqld)
+
+# check_linux_postfix_status
+- name: "Check/Remove cron job (Postfix) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-postfix-status
+  when:
+    - has_hc_postfix is not defined or (has_hc_postfix is defined and not has_hc_postfix)
+
+# check_linux_samba_status
+- name: "Check/Remove cron job (Samba) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-samba-status.noarch
+  when:
+    - has_hc_samba is not defined or (has_hc_samba is defined and not has_hc_samba)
+
+# check_linux_shorewall_status
+- name: "Check/Remove cron job (Shorewall) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-shorewall-status
+  when:
+    - has_hc_shorewall is not defined or (has_hc_shorewall is defined and not has_hc_shorewall)
+
+# check_linux_winbind_status
+- name: "Check/Remove cron job (Winbind) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-winbind-status
+  when:
+    - has_hc_winbind is not defined or (has_hc_winbind is defined and not has_hc_winbind)
+
+# check_linux_file_age
+- name: "Check/Remove cron job (file) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+      - hc-cron-file-age
+      - hc-cron-file-change
+  when:
+    - has_hc_file is not defined  or (has_hc_file is defined and not has_hc_file)
+
+# check_linux_process_limits
+- name: "Check/Remove cron job (process) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-process-limits
+  when:
+    - has_hc_process is not defined or (has_hc_process is defined and not has_hc_process)
+
+# check_linux_hpacucli
+- name: "Check/Remove cron job (HP ACU) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-hpacucli
+  when:
+    - has_hc_hpacu is not defined or (has_hc_hpacu is defined and not has_hc_hpacu)
+
+# check_linux_hpasmcli + check_linux_hplog
+- name: "Check/Remove cron job (HP ASM) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+      - hc-cron-hpasmcli
+      - hc-cron-hplog
+  when:
+    - has_hc_hpasm is not defined or (has_hc_hpasm is defined and not has_hc_hpasm)
+
+# check_linux_hpssacli + check_linux_hplog
+- name: "Check/Remove cron job (HP SSA) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+      - hc-cron-hpssacli.noarch
+      - hc-cron-hplog
+  when:
+    - has_hc_hpssa is not defined or (has_hc_hpssa is defined and not has_hc_hpssa)
+
+# check_linux_root_crontab
+- name: "Check/Remove cron job (root crontab) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-root-crontab
+  when:
+    - has_hc_root_crontab is not defined or (has_hc_root_crontab is defined and not has_hc_root_crontab)
+
+# check_linux_es_status
+- name: "Check/Remove cron job (Elasticsearch status) (CentOS 5)"
+  command: "yum remove -y -e0 -d2 {{item}}"
+  with_items:
+    - hc-cron-es-status
+  when:
+    - has_hc_elk is not defined or (has_hc_elk is defined and not has_hc_elk)

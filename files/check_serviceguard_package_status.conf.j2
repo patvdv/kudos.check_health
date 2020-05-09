@@ -1,0 +1,32 @@
+#******************************************************************************
+# @(#) check_serviceguard_package_status.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_sg_package_status HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_serviceguard_package_status.log_healthy | default('no') }}"
+
+# list of required package statuses
+# Format:
+#  sg:<package_name>:<parameter>=<value>
+# Examples:
+#sg:my_package:status=up
+{% if hc_check_serviceguard_package_status.packages is defined and hc_check_serviceguard_package_status.packages is not none %}
+{% for package_entry in hc_check_serviceguard_package_status.packages | sort(attribute='name')  %}
+{% if package_entry.params is defined and package_entry.params is not none %}
+{% for param_entry in package_entry.params %}
+sg:{{ package_entry.name }}:{{ param_entry.name }}={{ param_entry['value'] }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

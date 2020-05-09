@@ -1,0 +1,114 @@
+---
+# tasks file for health_check
+
+# build facts
+- name: "Set ENV facts"
+  set_fact:
+    is_arch: "{% if ansible_os_family == 'Archlinux' %}true{% else %}false{% endif %}"
+    is_centos5: "{% if ansible_os_family == 'RedHat' and ansible_distribution_major_version == '5' %}true{% else %}false{% endif %}"
+    is_debian: "{% if ansible_os_family == 'Debian' %}true{% else %}false{% endif %}"
+    is_kali: "{% if ansible_os_family == 'Kali GNU/Linux' %}true{% else %}false{% endif %}"
+    is_ubuntu: "{% if ansible_distribution == 'Ubuntu' %}true{% else %}false{% endif %}"
+    os_type: "{{ ansible_system | lower }}"
+  tags:
+    - always
+
+- name: "Get current packages"
+  package_facts:
+    manager: auto
+  when:
+    - not is_arch
+    - not is_centos5
+  tags:
+    - package_deploy
+    - cron_jobs
+
+- name: "Get current packages"
+  command: "pacman -Q"
+  register: arch_packages
+  when:
+    - is_arch
+  tags:
+    - package_deploy
+    - cron_jobs
+
+- name: "Get current packages"
+  command: "rpm -aq"
+  register: rpm_packages
+  when:
+    - is_centos5
+  tags:
+    - package_deploy
+    - cron_jobs
+
+- name: "Set package facts"
+  set_fact: 
+    packages: "{{ arch_packages.stdout }}"
+  when:
+    - is_arch
+  tags:
+    - package_deploy
+    - cron_jobs
+
+- name: "Set package facts"
+  set_fact: 
+    packages: "{{ rpm_packages.stdout }}"
+  when:
+    - is_centos5
+  tags:
+    - package_deploy
+    - cron_jobs
+
+- name: "Set HC facts (#1)"
+  set_fact:
+    # compile string of all hc_check_* vars
+    hc_plugins: "{{ query('varnames', 'hc_check_') }}"
+  tags:
+    - always
+  delegate_to: 127.0.0.1
+
+- name: "Set HC facts (#2)"
+  set_fact:
+    # compile list currently installed hc packages
+    hc_installed: "{{ ansible_facts['packages'] | list | select('match', 'hc-*') | list }}"
+  tags:
+    - package_deploy
+    - cron_jobs
+
+- name: "Update package cache"
+  apt:
+   update_cache: yes
+  when: is_debian or is_kali
+  tags:
+    - package_deploy
+    - cron_jobs
+
+- name: "Update package cache"
+  command: "yum clean all"
+  when: is_centos5
+  tags:
+    - package_deploy
+    - cron_jobs
+
+# deploy packages
+- include: set_packages.yml
+  when:
+    - hc_core is defined
+
+# deploy configuration
+- include: set_core_vars.yml
+  when:
+    - hc_core is defined
+
+- include: set_check_host.yml
+  when:
+    - hc_core is defined
+
+- include: set_plugin_config.yml
+  when:
+    - hc_core is defined
+
+#  deploy cron configuration/jobs
+- include: set_cron_jobs.yml
+  when:
+    - hc_core is defined

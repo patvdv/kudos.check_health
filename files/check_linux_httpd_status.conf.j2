@@ -1,0 +1,28 @@
+#******************************************************************************
+# @(#) check_linux_httpd_status.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_httpd_status HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_httpd_status.log_healthy | default('no') }}"
+
+# specify which type of process check to use
+# Format: <auto|pgrep|sysv|systemd>. NULL value equals to "auto"
+# [default: auto]
+# [release >20191101]
+check_type="{{ hc_check_linux_httpd_status.check_type | default('auto') }}"
+
+# specify custom path to the httpd binary
+# [default: null]
+# [release >20191101]
+httpd_bin="{{ hc_check_linux_httpd_status.httpd_bin | default('') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

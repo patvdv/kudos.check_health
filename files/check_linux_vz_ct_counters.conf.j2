@@ -1,0 +1,34 @@
+#******************************************************************************
+# @(#) check_linux_vz_ct_counters.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_vz_ct_counters HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_vz_ct_counters.log_healthy | default('no') }}"
+
+# specify UBC names to exclude (comma-separated list) (release >20200411)
+# [default: none]
+# [release >2020410]
+# Examples: numfile,numpty
+exclude_counters="{{ hc_check_linux_vz_ct_counters.exclude_counters | default('') }}"
+
+# specify containers for which to check the UBC
+# Format:
+#  [ct:<ct_id>]
+# Examples:
+#ct:100
+{% if hc_check_linux_vz_ct_counters.ct is defined and hc_check_linux_vz_ct_counters.ct is not none %}
+{% for entry in hc_check_linux_vz_ct_counters.ct | sort %}
+ct:{{ entry }}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

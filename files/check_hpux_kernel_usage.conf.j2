@@ -1,0 +1,39 @@
+#******************************************************************************
+# @(#) check_hpux_kernel_usage.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_hpux_kernel_usage HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_hpux_kernel_usage.log_healthy | default('no') }}"
+
+# specify a general maximum usage threshold (percentage)
+# [ default: 90% ]
+max_kcusage=90
+
+# specify individual kernel parameters and their maximum usage threshold (percentage)
+# definitions here will overrides max_kcusage for these parameters
+# Format:
+#   [param:<param_name>:<param_threshold>]
+# Examples:
+#param:nproc:70
+{% if hc_check_hpux_kernel_usage.params is defined and hc_check_hpux_kernel_usage.params is not none %}
+{% for entry in hc_check_hpux_kernel_usage.params | sort %}
+param:{{ entry.name }}:{{ entry['value'] }}
+{% endfor %}
+{% endif %}
+
+# specify parameters that should be excluded from the check
+# comma-separated list (as shown by kctune/kcusage)
+# (does not override param:: lines from above)
+# [ default: none ]
+exclude_params="{{ hc_check_hpux_kernel_usage.exclude_params | default('') }}"
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

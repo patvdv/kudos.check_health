@@ -1,0 +1,34 @@
+#******************************************************************************
+# @(#) check_serviceguard_cluster_config.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_serviceguard_cluster_config HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_serviceguard_cluster_config.log_healthy | default('no') }}"
+
+# Examples:
+#[mycluster]
+#param1		value1
+#param2		value2
+{% if hc_check_serviceguard_cluster_config.cluster is defined and hc_check_serviceguard_cluster_config.cluster is not none %}
+{% for cluster_entry in hc_check_serviceguard_cluster_config.cluster | sort %}
+[{{ cluster_entry.name }}]
+{% if cluster_entry.params is defined and cluster_entry.params is not none %}
+{% for param_entry in cluster_entry.params | sort %}
+{% for key,value in param_entry.items() %}
+{{ key }}	{{ value }}
+{% endfor %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

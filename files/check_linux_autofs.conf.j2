@@ -1,0 +1,31 @@
+#******************************************************************************
+# @(#) check_linux_autofs.conf [release >=20200418]
+#******************************************************************************
+# This is a configuration file for the check_linux_autofs HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_autofs.log_healthy | default('no') }}"
+
+# specify whether to fix autofs (if needed)
+# [default: no]
+fix_autofs="{{ hc_check_linux_autofs.fix_autofs | default('no') }}"
+
+# number of times to attempt to restart the autofs daemon
+# (requires fix_autofs=yes)
+# [default: 3]
+retry_start={{ hc_check_linux_autofs.retry_start | default('3') }}
+
+# number of seconds to sleep between daemon restart attempts
+# (requires fix_autofs=yes)
+# [default: 5]
+sleep_time={{ hc_check_linux_autofs.sleep_time | default('5') }}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************
