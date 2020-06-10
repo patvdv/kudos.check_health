@@ -43,15 +43,19 @@
     - (hc_core.installed is defined) and hc_core.installed | bool
     - not is_arch
     - not is_centos5
+    - not is_hpux
   loop: "{{ hc_ds_cron_packages | default([]) | sort }}"
   tags: cron_jobs
 
 - name: "Set cron jobs (add)"
   command: "yum install -y -e0 -d2 {{ item }}"
+  register: yum
   when:
+    # do not check against hc_installed so we can simulate state: latest
     - (hc_ds_cron_packages is defined) and hc_ds_cron_packages
     - (hc_core.installed is defined) and hc_core.installed | bool
     - is_centos5
+  changed_when: "'already installed and latest version' not in yum.stdout"
   loop: "{{ hc_ds_cron_packages | default([]) | sort }}"
   tags: cron_jobs
 
@@ -67,6 +71,18 @@
   loop: "{{ hc_ds_cron_packages | default([]) | sort }}"
   tags: cron_jobs
 
+- name: "Update packages (add)"
+  command: "swinstall -s {{ hc_hpux_depot }} {{ item }}"
+  register: swinstall
+  when:
+    # do not check against hc_installed so we can simulate state: latest
+    - (hc_ds_cron_packages is defined) and hc_ds_cron_packages
+    - (hc_core.installed is defined) and hc_core.installed | bool
+    - is_hpux
+  changed_when: "'1 bundles have the selected revision already' not in swinstall.stdout"
+  loop: "{{ hc_ds_cron_packages | default([]) | sort }}"
+  tags: package_deploy
+
 - name: "Set cron jobs (remove)"
   package:
     name: "{{ item }}"
@@ -75,6 +91,7 @@
     - (hc_ds_cron_packages is not defined) or ((hc_ds_cron_packages is defined) and item not in hc_ds_cron_packages)
     - not is_arch
     - not is_centos5
+    - not is_hpux
   loop: "{{ hc_installed | select('match', 'hc-cron*') | list | sort }}"
   tags: cron_jobs
 
@@ -95,3 +112,11 @@
     - is_arch
   loop: "{{ hc_installed | select('match', 'hc-cron*') | list | sort }}"
   tags: cron_jobs
+
+- name: "Deploy packages (remove)"
+  command: "swremove {{ item }}"
+  when:
+    - (hc_ds_cron_packages is not defined) or ((hc_ds_cron_packages is defined) and item not in hc_ds_cron_packages)
+    - is_hpux
+  loop: "{{ hc_installed | select('match', 'HC-CRON*') | list | sort }}"
+  tags: package_deploy

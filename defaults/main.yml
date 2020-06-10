@@ -25,3 +25,6 @@ hc_notify_eif:
   installed: "yes"
 hc_notify_sms:
   installed: "yes"
+
+# repository parameters
+hc_hpux_depot: "/var/spool/sw"

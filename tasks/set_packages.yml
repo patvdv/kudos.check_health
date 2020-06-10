@@ -65,15 +65,19 @@
     - (hc_core.installed is defined) and hc_core.installed | bool
     - not is_arch
     - not is_centos5
+    - not is_hpux
   loop: "{{ hc_ds_packages | default([]) | unique | sort }}"
   tags: package_deploy
 
 - name: "Update packages (add)"
   command: "yum install -y -e0 -d2 {{ item }}"
+  register: yum
   when:
+    # do not check against hc_installed so we can simulate state: latest
     - (hc_ds_packages is defined) and hc_ds_packages
     - (hc_core.installed is defined) and hc_core.installed | bool
     - is_centos5
+  changed_when: "'already installed and latest version' not in yum.stdout"
   loop: "{{ hc_ds_packages | default([]) | unique | sort }}"
   tags: package_deploy
 
@@ -89,6 +93,19 @@
   loop: "{{ hc_ds_packages | default([]) | unique | sort }}"
   tags: package_deploy
 
+- name: "Update packages (add)"
+  command: "swinstall -s {{ hc_hpux_depot }} {{ item }}"
+  register: swinstall
+  when:
+    # do not check against hc_installed so we can simulate state: latest
+    - (hc_ds_packages is defined) and hc_ds_packages
+    - (hc_core.installed is defined) and hc_core.installed | bool
+    - hc_hpux_depot is defined
+    - is_hpux
+  changed_when: "'1 bundles have the selected revision already' not in swinstall.stdout"
+  loop: "{{ hc_ds_packages | default([]) | unique | sort }}"
+  tags: package_deploy
+
 - name: "Deploy packages (remove)"
   package:
     name: "{{ item }}"
@@ -97,6 +114,7 @@
     - (hc_ds_packages is not defined) or ((hc_ds_packages is defined) and item not in hc_ds_packages)
     - not is_arch
     - not is_centos5
+    - not is_hpux
   loop: "{{ hc_installed | select('match', 'hc-*') | reject('match', 'hc-cron*') | list }}"
   tags: package_deploy
 
@@ -116,4 +134,12 @@
     - (hc_ds_packages is not defined) or ((hc_ds_packages is defined) and item not in hc_ds_packages)
     - is_arch
   loop: "{{ hc_installed | select('match', 'hc-*') | reject('match', 'hc-cron*') | list }}"
+  tags: package_deploy
+
+- name: "Deploy packages (remove)"
+  command: "swremove {{ item }}"
+  when:
+    - (hc_ds_packages is not defined) or ((hc_ds_packages is defined) and item not in hc_ds_packages)
+    - is_hpux
+  loop: "{{ hc_installed | select('match', 'HC-*') | reject('match', 'HC-CRON*') | list }}"
   tags: package_deploy

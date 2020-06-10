@@ -97,7 +97,7 @@ hc_packages:
     hc_display_zenoss: "hc-display-zenoss"
     hc_notify_eif: "hc-notify-eif"
     hc_notify_sms: "hc-notify-sms"
-  hpux:
+  hp-ux:
     hc_core: "HC-HPUX"
     hc_check_hpux_autofs: "HC-PLATFORM"
     hc_check_hpux_autopath: "HC-PLATFORM"
@@ -138,8 +138,8 @@ hc_packages:
     hc_display_json: "HC-DISPLAY-JSON"
     hc_display_terse: "HC-DISPLAY-TERSE"
     hc_display_zenoss: "HC-DISPLAY-ZENOSS"
-    hc_notify_eif: "HC-DISPLAY-EIF"
-    hc_notify_sms: "HC-DISPLAY-SMS"
+    hc_notify_eif: "HC-NOTIFY-EIF"
+    hc_notify_sms: "HC-NOTIFY-SMS"
   linux:
     hc_core: "hc-linux"
     hc_check_clusterware_resource_config: "hc-clusterware-platform"
@@ -209,7 +209,7 @@ hc_cron_packages:
     hc_check_aix_subsystems: "hc-cron-subsystems"
     hc_check_aix_sysbackup: "hc-cron-sysbackup"
     hc_check_aix_topasrec: "hc-cron-topasrc"
-  hpux:
+  hp-ux:
     hc_check_hpux_autofs: "HC-CRON-autofs"
     hc_check_hpux_autopath: "HC-CRON-autopath"
     hc_check_hpux_cdsf_cluster: "HC-CRON-cdsf_cluster"

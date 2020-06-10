@@ -9,6 +9,7 @@
     is_debian: "{% if ansible_os_family == 'Debian' %}true{% else %}false{% endif %}"
     is_kali: "{% if ansible_os_family == 'Kali GNU/Linux' %}true{% else %}false{% endif %}"
     is_ubuntu: "{% if ansible_distribution == 'Ubuntu' %}true{% else %}false{% endif %}"
+    is_hpux: "{% if ansible_system == 'HP-UX' %}true{% else %}false{% endif %}"
     os_type: "{{ ansible_system | lower }}"
   tags:
     - always
@@ -19,6 +20,7 @@
   when:
     - not is_arch
     - not is_centos5
+    - not is_hpux
   tags:
     - package_deploy
     - cron_jobs
@@ -28,22 +30,34 @@
   register: arch_packages
   when:
     - is_arch
+  changed_when: false
   tags:
     - package_deploy
     - cron_jobs
 
 - name: "Get current packages"
-  command: "rpm -aq"
+  command: "rpm -qa --queryformat '%{NAME}\n'"
   register: rpm_packages
   when:
     - is_centos5
+  changed_when: false
+  tags:
+    - package_deploy
+    - cron_jobs
+
+- name: "Get current packages"
+  shell: "swlist -a product | grep -v -E -e '#' -e '^$' | tr -d '[:blank:]'"
+  register: swdepot_packages
+  when:
+    - is_hpux
+  changed_when: false
   tags:
     - package_deploy
     - cron_jobs
 
 - name: "Set package facts"
   set_fact: 
-    packages: "{{ arch_packages.stdout }}"
+    packages: "{{ arch_packages.stdout_lines }}"
   when:
     - is_arch
   tags:
@@ -52,9 +66,18 @@
 
 - name: "Set package facts"
   set_fact: 
-    packages: "{{ rpm_packages.stdout }}"
+    packages: "{{ rpm_packages.stdout_lines }}"
   when:
     - is_centos5
+  tags:
+    - package_deploy
+    - cron_jobs
+
+- name: "Set package facts"
+  set_fact:
+    packages: "{{ swdepot_packages.stdout_lines }}"
+  when:
+    - is_hpux
   tags:
     - package_deploy
     - cron_jobs
@@ -62,7 +85,7 @@
 - name: "Set HC facts (#1)"
   set_fact:
     # compile string of all hc_check_* vars
-    hc_plugins: "{{ query('varnames', 'hc_check_') }}"
+    hc_plugins: "{{ hostvars[inventory_hostname] | select('match', 'hc_check_.*') | list }}"
   tags:
     - always
   delegate_to: 127.0.0.1
@@ -70,10 +93,22 @@
 - name: "Set HC facts (#2)"
   set_fact:
     # compile list currently installed hc packages
-    hc_installed: "{{ ansible_facts['packages'] | list | select('match', 'hc-*') | list }}"
+    hc_installed: "{{ packages | select('match', 'hc-*') | list }}"
   tags:
     - package_deploy
     - cron_jobs
+  when:
+    - not is_hpux
+
+- name: "Set HC facts (#2)"
+  set_fact:
+    # compile list currently installed hc packages
+    hc_installed: "{{ packages | select('match', 'HC-*') | list }}"
+  tags:
+    - package_deploy
+    - cron_jobs
+  when:
+    - is_hpux
 
 - name: "Update package cache"
   apt:
