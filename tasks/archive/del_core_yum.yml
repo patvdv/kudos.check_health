@@ -1,9 +1,0 @@
----
-# tasks file for health_check
-
-# HC core
-- name: "Remove core (CentOS 5)"
-  command: "yum remove -y -e0 -d2 {{item}}"
-  with_items:
-    - hc-linux
-    - hc-linux-platform
