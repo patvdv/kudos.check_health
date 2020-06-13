@@ -12,7 +12,7 @@
 
 - name: "Configure /etc/opt/hc/check_host.conf"
   template:
-    src: files/check_host.conf.j2
+    src: check_host.conf.j2
     dest: /etc/opt/hc/check_host.conf
   # no when clause to make sure check_host.conf gets emptied when hc_ds_check_host is null
   tags: check_host
