@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_exadata_zfs_cluster:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   ssh_user: <user>
@@ -15,12 +16,15 @@ hc_check_exadata_zfs_cluster:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *ssh_user*: `root`
 * *ssh_key_file*: `~root/.ssh/id_rsa`
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenanc
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 

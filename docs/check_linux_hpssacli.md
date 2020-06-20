@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_linux_hpssacli:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   hpssacli_bin : <file_path>
@@ -14,6 +15,7 @@ hc_check_linux_hpssacli:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *hpssacli_bin*: `/usr/sbin/hpssacli`
@@ -22,7 +24,9 @@ Default values (non-null):
 * *do_ssa_physical*: `1`
 * *do_ssa_logical*: `1`
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 
@@ -38,6 +42,7 @@ Following **check host** parameters are considered optional within the plugin pa
 
 ```yaml
 hc_check_linux_hpssacli:
+  enabled: "yes"
   scheduled: "yes"    
   log_healthy: "no"
   do_ssa_controller: 1

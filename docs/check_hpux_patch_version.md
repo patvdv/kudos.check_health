@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_hpux_patch_version:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   required_oe: <version>
@@ -13,12 +14,15 @@ hc_check_hpux_patch_version:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *check_filesets*: `yes`
 * *exclude_filesets*: `yes`
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 
@@ -34,6 +38,7 @@ Following **check host** parameters are considered optional within the plugin pa
 
 ```yaml
 hc_check_hpux_patch_version:
+  enabled: "yes"
   scheduled: "yes"    
   log_healthy: "no"
   required_oe: "B.11.31.19.05"

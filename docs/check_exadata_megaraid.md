@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_exadata_megaraid:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   check_controller: <yes|no>
@@ -14,6 +15,7 @@ hc_check_exadata_megaraid:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *check_controller*: `yes`
@@ -22,7 +24,9 @@ Default values (non-null):
 * *check_physical*: `yes`
 * *check_virtual*: `yes`
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenanc
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 
@@ -38,6 +42,7 @@ Following **check host** parameters are considered optional within the plugin pa
 
 ```yaml
 hc_check_exadata_megaraid:
+  enabled: "yes"
   scheduled: "no"
   log_healthy: "yes"
   check_controller: "yes"

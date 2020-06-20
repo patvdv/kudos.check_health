@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_hpux_syslog:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   syslog_file: <file_path>
@@ -11,12 +12,15 @@ hc_check_hpux_syslog:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *syslog_file*: `/var/adm/syslog/syslog.log`
 * *syslog_classes*: `vmunix`
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 
@@ -32,6 +36,7 @@ Following **check host** parameters are considered optional within the plugin pa
 
 ```yaml
 hc_check_hpux_syslog:
+  enabled: "yes"
   scheduled: "yes"    
   log_healthy: "yes"
   syslog_classes: "vmunix,mountd"

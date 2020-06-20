@@ -1,0 +1,12 @@
+---
+# tasks file for health_check
+- name: "Get plugin status ({{ item }})"
+  command: "/opt/hc/bin/check_health.sh --check --hc={{ item | regex_replace('^hc_', '') }}"
+  register: hc_state
+  tags: plugin_state
+
+- name: "Build plugin status ({{ item }})"
+  set_fact:
+    hc_enabled_plugins: "{{ hc_enabled_plugins | default([]) + [item] }}"
+  when: hc_state.stdout_lines is regex('.* is currently enabled.*')
+  tags: plugin_state

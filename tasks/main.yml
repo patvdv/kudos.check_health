@@ -56,7 +56,7 @@
     - cron_jobs
 
 - name: "Set package facts"
-  set_fact: 
+  set_fact:
     packages: "{{ arch_packages.stdout_lines }}"
   when:
     - is_arch
@@ -65,7 +65,7 @@
     - cron_jobs
 
 - name: "Set package facts"
-  set_fact: 
+  set_fact:
     packages: "{{ rpm_packages.stdout_lines }}"
   when:
     - is_centos5
@@ -140,6 +140,11 @@
     - hc_core is defined
 
 - include: set_plugin_config.yml
+  when:
+    - hc_core is defined
+
+# deploy plugin state
+- include: set_plugin_state.yml
   when:
     - hc_core is defined
 

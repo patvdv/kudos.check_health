@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_hpux_sfm_status:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   check_events: <yes|no>
@@ -16,6 +17,7 @@ hc_check_hpux_sfm_status:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *events_events*: `yes`
@@ -24,7 +26,9 @@ Default values (non-null):
 * *send_test_event*: `no`
 * *wait_test_event*: 60
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 
@@ -40,6 +44,7 @@ Following **check host** parameters are considered optional within the plugin pa
 
 ```yaml
 hc_check_hpux_sfm_status:
+  enabled: "no"
   scheduled: "yes"    
   log_healthy: "yes"
   events_age: "'3:dd"

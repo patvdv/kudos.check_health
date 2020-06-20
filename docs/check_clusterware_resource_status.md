@@ -4,7 +4,9 @@
 
 ```yaml
 hc_check_clusterware_resource_status:
+  enabled: <yes|no>
   scheduled: <yes|no>
+  log_healthy: <yes|no>
   crsctl_bin: <file_path>
   resources:
     - name: <resource>
@@ -12,10 +14,13 @@ hc_check_clusterware_resource_status:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 

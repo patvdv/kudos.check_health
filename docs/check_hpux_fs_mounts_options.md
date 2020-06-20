@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_hpux_fs_mounts_options:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   ignore_missing_fs: <yes|no>
@@ -13,11 +14,14 @@ hc_check_hpux_fs_mounts_options:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *ignore_missing_fs*: `yes`
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 
@@ -33,6 +37,7 @@ Following **check host** parameters are considered optional within the plugin pa
 
 ```yaml
 hc_check_hpux_fs_mounts_options:
+  enabled: "yes"
   scheduled: "yes"    
   log_healthy: "yes"
   ignore_missing_fs: "no"

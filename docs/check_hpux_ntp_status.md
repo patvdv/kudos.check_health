@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_hpux_ntp_status:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   max_offset: <millisecond>
@@ -11,12 +12,15 @@ hc_check_hpux_ntp_status:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *max_offset*: `500`
 * *ntpq_use_ipv4*: `yes`
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 
@@ -32,6 +36,7 @@ Following **check host** parameters are considered optional within the plugin pa
 
 ```yaml
 hc_check_hpux_ntp_status:
+  enabled: "yes"
   scheduled: "yes"    
   log_healthy: "yes"
   max_offset: 1000

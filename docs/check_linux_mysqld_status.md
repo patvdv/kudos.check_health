@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_linux_mysqld_status:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   do_check: <yes|no>
@@ -19,6 +20,7 @@ hc_check_linux_mysqld_status:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *do_check*: `yes`
@@ -28,7 +30,9 @@ Default values (non-null):
 * *mysql_host*: `localhost`
 * *mysql_port*: `3306`
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
 
 Use Ansible vault to the set the `mysql_password` value!
 
@@ -46,6 +50,7 @@ Following **check host** parameters are considered optional within the plugin pa
 
 ```yaml
 hc_check_linux_mysqld_status:
+  enabled: "yes"
   scheduled: "yes"    
   log_healthy: "yes"
   check_type: "quick"

@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_aix_root_crontab:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   jobs:
@@ -12,10 +13,13 @@ hc_check_aix_root_crontab:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 
@@ -31,6 +35,7 @@ Following **check host** parameters are considered optional within the plugin pa
 
 ```yaml
 hc_check_aix_root_crontab:
+  enabled: "no"
   scheduled: "no"
   log_healthy: "yes"
   jobs:

@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_linux_fs_usage:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   check_inodes_usage: <yes|no>
@@ -17,6 +18,7 @@ hc_check_linux_fs_usage:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *check_inodes_usage*: `yes`
@@ -24,7 +26,9 @@ Default values (non-null):
 * *check_space_usage*: `yes`
 * *max_space_usage*: `90` (only general threshold)
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 
@@ -40,6 +44,7 @@ Following **check host** parameters are considered optional within the plugin pa
 
 ```yaml
 hc_check_linux_fs_usage:
+  enabled: "yes"
   scheduled: "yes"    
   log_healthy: "yes"
   check_host:
