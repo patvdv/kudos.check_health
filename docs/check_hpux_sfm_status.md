@@ -9,7 +9,7 @@ hc_check_hpux_sfm_status:
   log_healthy: <yes|no>
   check_events: <yes|no>
   events_age: <day_string>
-  events_security: <list_severities>
+  events_severity: <list_severities>
   send_test_event: <yes|no>
   wait_test_event: <seconds>
   event_subscriber_wbem: <url>
@@ -22,7 +22,7 @@ Default values (non-null):
 * *log_healthy*: `no`
 * *events_events*: `yes`
 * *events_age*: `1:dd`
-* *events_security*: `CRITICAL`
+* *events_severity*: `CRITICAL`
 * *send_test_event*: `no`
 * *wait_test_event*: 60
 
@@ -48,7 +48,7 @@ hc_check_hpux_sfm_status:
   scheduled: "yes"    
   log_healthy: "yes"
   events_age: "'3:dd"
-  events_security: "CRITICAL,ERROR"
+  events_severity: "CRITICAL,ERROR"
   send_test_event: "no"
 ```
 

@@ -28,7 +28,7 @@ events_age="{{ hc_check_hpux_sfm_status.events_age | default('1:dd') }}"
 # severities: MILESTONE,INFORMATIONAL,WARNING,ERROR,CRITICAL,STOPLOGGING
 # see also: /var/opt/sfm/conf/FMLoggerConfig.xml
 # [default: CRITICAL]
-events_security="{{ hc_check_hpux_sfm_status.events_security | default('CRITICAL') }}"
+events_severity="{{ hc_check_hpux_sfm_status.events_severity | default('CRITICAL') }}"
 
 # specify whether to send a test event? (yes|no)
 # [default: no]

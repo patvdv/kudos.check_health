@@ -14,7 +14,7 @@ Default values (non-null):
 * *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
-* *ovpa_deamons:* `oacore,midaemon,perfalarm,ttd,ovcd,ovbbccb,perfd`
+* *ovpa_daemons:* `oacore,midaemon,perfalarm,ttd,ovcd,ovbbccb,perfd`
 
 Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
 
