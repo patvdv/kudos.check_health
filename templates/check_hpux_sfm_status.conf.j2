@@ -40,8 +40,8 @@ wait_test_event={{ hc_check_hpux_sfm_status.wait_test_event | default('60') }}
 
 # specify the URL for the external SIM/IRS subscriber (only 1 URL supported)
 # [default: none]
-event_subscriber_wbem={{ hc_check_hpux_sfm_status.event_subscriber_wbem | default('') }}
-event_subscriber_cimom={{ hc_check_hpux_sfm_status.event_subscriber_cimom | default('') }}
+event_subscriber_wbem="{{ hc_check_hpux_sfm_status.event_subscriber_wbem | default('') }}"
+event_subscriber_cimom="{{ hc_check_hpux_sfm_status.event_subscriber_cimom | default('') }}"
 
 
 #******************************************************************************
