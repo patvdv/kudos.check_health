@@ -55,6 +55,36 @@
     - package_deploy
     - cron_jobs
 
+# end the play if do not have a package list (--check)
+- name: "Check package variable"
+  meta: end_host
+  when:
+    - is_arch
+    - arch_packages.stdout_lines is not defined
+  tags:
+    - package_deploy
+    - cron_jobs
+
+# end the play if do not have a package list (--check)
+- name: "Check package variable"
+  meta: end_host
+  when:
+    - is_centos5
+    - rpm_packages.stdout_lines is not defined
+  tags:
+    - package_deploy
+    - cron_jobs
+
+# end the play if do not have a package list (--check)
+- name: "Check package variable"
+  meta: end_host
+  when:
+    - is_hpux
+    - swdepot_packages.stdout_lines is not defined
+  tags:
+    - package_deploy
+    - cron_jobs
+
 - name: "Set package facts"
   set_fact:
     packages: "{{ arch_packages.stdout_lines }}"
