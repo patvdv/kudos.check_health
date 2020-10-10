@@ -14,7 +14,7 @@ display_style="init"
 # optional except 'HC plugin name'
 # [hc:HC plugin name:HC plugin configuration file:HC title:HC plugin run timeout]
 {% for plugin in hc_ds_check_host | default([]) | sort %}
-hc:{{ plugin | regex_replace('^hc_') }}:{{ vars[plugin]['check_host']['config_file'] | default('') }}:{{ vars[plugin]['check_host']['title'] | default('') | regex_replace(':') }}:{{ vars[plugin]['check_host']['timeout'] | default('') }}
+hc:{{ plugin | regex_replace('^hc_') }}:{{ hostvars[inventory_hostname][plugin]['check_host']['config_file'] | default('') }}:{{ hostvars[inventory_hostname][plugin]['check_host']['title'] | default('') | regex_replace(':') }}:{{ hostvars[inventory_hostname][plugin]['check_host']['timeout'] | default('') }}
 {% endfor %}
 
 

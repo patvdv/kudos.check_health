@@ -13,7 +13,7 @@ log_healthy="{{ hc_check_hpux_ovpa_status.log_healthy | default('no') }}"
 
 # list of OVPA daemons to check (comma-separated list)
 # [default: oacore,midaemon,perfalarm,ttd,ovcd,ovbbccb,perfd (v12)]
-ovpa_deamons="{{ hc_check_hpux_ovpa_status.ovpa_daemons | default('oacore,midaemon,perfalarm,ttd,ovcd,ovbbccb,perfd') }}"
+ovpa_daemons="{{ hc_check_hpux_ovpa_status.ovpa_daemons | default('oacore,midaemon,perfalarm,ttd,ovcd,ovbbccb,perfd') }}"
 
 
 #******************************************************************************

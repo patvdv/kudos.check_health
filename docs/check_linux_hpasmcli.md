@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_linux_hpasmcli:
+  enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   hpasmcli_bin: <file_path>
@@ -15,6 +16,7 @@ hc_check_linux_hpasmcli:
 ```
 
 Default values (non-null):
+* *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *hpasmcli_bin*: `/sbin/hpasmcli`
@@ -24,7 +26,10 @@ Default values (non-null):
 * *do_asm_server*: `1`
 * *do_asm_temperature*: `1`
 
-Setting *scheduled=yes* option will result in the corresponding **cron** bundle to be installed (if available)
+Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+
+Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
+
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 
@@ -40,6 +45,7 @@ Following **check host** parameters are considered optional within the plugin pa
 
 ```yaml
 hc_check_linux_hpasmcli:
+  enabled: "yes"
   scheduled: "yes"    
   log_healthy: "no"
   do_asm_fans: 0

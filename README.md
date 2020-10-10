@@ -5,7 +5,7 @@ Deployment and configuration of the KUDOS **Health Checker** framework (http://w
 
 ## Requirements
 
-Ansible v2.5+
+Ansible v2.8+
 
 
 ## Role Variables

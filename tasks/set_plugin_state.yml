@@ -1,0 +1,27 @@
+---
+# tasks file for health_check
+- name: "Find enabled plugins"
+  # emulate a block of tasks loop
+  include_tasks: find_enabled_plugins.yml
+  loop: "{{ hc_plugins | sort }}"
+  tags: plugin_state
+
+- name: "Update plugin state (enable)"
+  command: "/opt/hc/bin/check_health.sh --hc={{ item | regex_replace('^hc_', '') }} --enable"
+  when:
+    - (hc_plugins is defined) and hc_plugins
+    - (hc_core.installed is defined) and hc_core.installed | bool
+    - (vars[item].enabled is defined) and vars[item].enabled | bool
+    - (hc_enabled_plugins is defined) and item not in hc_enabled_plugins
+  loop: "{{ hc_plugins | sort }}"
+  tags: plugin_state
+
+- name: "Update plugin state (disable)"
+  command: "/opt/hc/bin/check_health.sh --hc={{ item | regex_replace('^hc_', '') }} --disable"
+  when:
+    - (hc_plugins is defined) and hc_plugins
+    - (hc_core.installed is defined) and hc_core.installed | bool
+    - (vars[item].enabled is defined) and not vars[item].enabled | bool
+    - (hc_enabled_plugins is defined) and item in hc_enabled_plugins
+  loop: "{{ hc_plugins | sort }}"
+  tags: plugin_state

@@ -12,7 +12,7 @@
 
 - name: "Set plugin configuration (add/update)"
   template:
-    src: "files/{{ item }}.conf.j2"
+    src: "{{ item }}.conf.j2"
     dest: "/etc/opt/hc/{{ item }}.conf"
   when:
     - (hc_plugins is defined) and hc_plugins
@@ -38,7 +38,7 @@
 
 - name: "Set plugin configuration (notify_sms)"
   template:
-    src: "files/notify_sms.conf.j2"
+    src: "notify_sms.conf.j2"
     dest: "/etc/opt/hc/core/providers/notify_sms.conf"
   when:
     - (hc_notify_sms.installed is defined) and hc_notify_sms.installed | bool
@@ -54,7 +54,7 @@
 
 - name: "Set plugin configuration (notify_eif)"
   template:
-    src: "files/notify_eif.conf.j2"
+    src: "notify_eif.conf.j2"
     dest: "/etc/opt/hc/core/providers/notify_eif.conf"
   when:
     - (hc_notify_eif.installed is defined) and hc_notify_eif.installed | bool
