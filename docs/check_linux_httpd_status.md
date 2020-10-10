@@ -7,7 +7,8 @@ hc_check_linux_httpd_status:
   scheduled: <yes|no>
   log_healthy: <yes|no>
   check_type: <type>
-  httpd_bin: <file_path>
+  httpd_bin: <file_name>
+  httpd_path: <file_path>
 ```
 
 Default values (non-null):

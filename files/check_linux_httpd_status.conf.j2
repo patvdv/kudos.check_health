@@ -1,5 +1,5 @@
 #******************************************************************************
-# @(#) check_linux_httpd_status.conf [release >=20200418]
+# @(#) check_linux_httpd_status.conf [release >=20201010]
 #******************************************************************************
 # This is a configuration file for the check_linux_httpd_status HC plugin.
 # All lines starting with a '#' are comment lines.
@@ -18,9 +18,15 @@ log_healthy="{{ hc_check_linux_httpd_status.log_healthy | default('no') }}"
 check_type="{{ hc_check_linux_httpd_status.check_type | default('auto') }}"
 
 # specify custom path to the httpd binary
+# Format: httpd|apache|apache2
+# [default: httpd]
+# [release >20201010]
+httpd_bin="{{ hc_check_linux_httpd_status.httpd_bin | default('httpd') }}"
+
+# specify custom path to the httpd binary
 # [default: null]
-# [release >20191101]
-httpd_bin="{{ hc_check_linux_httpd_status.httpd_bin | default('') }}"
+# [release >20201010]
+httpd_path="{{ hc_check_linux_httpd_status.httpd_path | default('') }}"
 
 
 #******************************************************************************
