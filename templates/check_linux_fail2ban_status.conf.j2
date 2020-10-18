@@ -9,17 +9,17 @@
 # specify whether to also log passed health checks
 # (warning: this may rapidly grow the HC log)
 # [default: no]
-log_healthy="{{ hc_check_fail2ban_httpd_status.log_healthy | default('no') }}"
+log_healthy="{{ hc_check_fail2ban_status.log_healthy | default('no') }}"
 
 # specify which type of process check to use
 # Format: <auto|pgrep|sysv|systemd>. NULL value equals to "auto"
 # [default: auto]
-check_type="{{ hc_check_fail2ban_httpd_status.check_type | default('auto') }}"
+check_type="{{ hc_check_fail2ban_status.check_type | default('auto') }}"
 
 # specify the list jails to status check (comma-separated)
 # Format: jail1,jail2,jail3,...
 # [default: none]
-check_jails="{{ hc_check_fail2ban_httpd_status.check_jails | default('') }}"
+check_jails="{{ hc_check_fail2ban_status.check_jails | default('') }}"
 
 
 #******************************************************************************

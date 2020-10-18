@@ -3,7 +3,7 @@
 ### Syntax
 
 ```yaml
-hc_check_fail2ban_httpd_status:
+hc_check_fail2ban_status:
   enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
@@ -34,7 +34,7 @@ Following **check host** parameters are considered optional within the plugin pa
 ### Example
 
 ```yaml
-hc_check_fail2ban_httpd_status:
+hc_check_fail2ban_status:
   enabled: "no"
   scheduled: "yes"    
   log_healthy: "yes"
@@ -44,4 +44,4 @@ hc_check_fail2ban_httpd_status:
 
 ### Further reading
 
-See the plugin configuration file `check_fail2ban_httpd_status.conf` for more explanation on the parameters and options.
+See the plugin configuration file `check_fail2ban_status.conf` for more explanation on the parameters and options.

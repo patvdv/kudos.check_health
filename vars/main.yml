@@ -57,6 +57,7 @@ hc_configs:
   - check_linux_autofs
   - check_linux_burp_backup
   - check_linux_es_status
+  - check_linux_fail2ban_status
   - check_linux_file_age
   - check_linux_file_change
   - check_linux_fs_usage
@@ -161,6 +162,7 @@ hc_packages:
     hc_check_linux_autofs: "hc-linux-platform"
     hc_check_linux_burp_backup: "hc-linux-platform"
     hc_check_linux_burp_status: "hc-linux-platform"
+    hc_check_linux_fail2ban_status: "hc-linux-platform"
     hc_check_linux_es_status: "hc-linux-platform"
     hc_check_linux_file_age: "hc-linux-platform"
     hc_check_linux_file_change: "hc-linux-platform"
