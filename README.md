@@ -103,6 +103,7 @@ Default values (non-null):
 * [check_linux_burp_backup](docs/check_linux_burp_backup.md)
 * [check_linux_burp_status](docs/check_linux_burp_status.md)
 * [check_linux_es_status](docs/check_linux_es_status.md)
+* [check_linux_fail2ban_status](docs/check_linux_fail2ban_status.md)
 * [check_linux_file_age](docs/check_linux_file_age.md)
 * [check_linux_file_change](docs/check_linux_file_change.md)
 * [check_linux_fs_mounts](docs/check_linux_fs_mounts.md)
