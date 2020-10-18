@@ -3,12 +3,14 @@
 ### Syntax
 
 ```yaml
-hc_check_fail2ban_status:
+hc_check_linux_fail2ban_status:
   enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
   check_type: <type>
-  check_jails: <jail_list>
+  check_jails:
+    - <jail1>
+    - <jail2>
 ```
 
 Default values (non-null):
@@ -34,14 +36,16 @@ Following **check host** parameters are considered optional within the plugin pa
 ### Example
 
 ```yaml
-hc_check_fail2ban_status:
+hc_check_linux_fail2ban_status:
   enabled: "no"
   scheduled: "yes"    
   log_healthy: "yes"
   check_type: "auto"
-  check_jails: "sshd,apache"
+  check_jails:
+    - "sshd"
+    - "apache"
 ```
 
 ### Further reading
 
-See the plugin configuration file `check_fail2ban_status.conf` for more explanation on the parameters and options.
+See the plugin configuration file `check_linux_fail2ban_status.conf` for more explanation on the parameters and options.
