@@ -20,7 +20,7 @@ check_type="{{ hc_check_linux_fail2ban_status.check_type | default('auto') }}"
 # Format: jail1,jail2,jail3,...
 # [default: none]
 {% if hc_check_linux_fail2ban_status.check_jails is defined and hc_check_linux_fail2ban_status.check_jails is not none %}
-check_jails="{% for entry in hc_check_linux_fail2ban_status.check_jails | sort %}{{ entry }},{% endfor %}"
+check_jails="{{ hc_check_linux_fail2ban_status.check_jails | default('') | join(',') }}"
 {% else %}
 check_jails=""
 {% endif %}
