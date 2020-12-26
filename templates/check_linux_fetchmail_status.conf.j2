@@ -1,0 +1,33 @@
+#******************************************************************************
+# @(#) check_linux_fetchmail_status.conf [release >=20201227]
+#******************************************************************************
+# This is a configuration file for the check_linux_fetchmail_status HC plugin.
+# All lines starting with a '#' are comment lines.
+# [default: indicates hardcoded script values if no value is defined here]
+#******************************************************************************
+
+# specify whether to also log passed health checks
+# (warning: this may rapidly grow the HC log)
+# [default: no]
+log_healthy="{{ hc_check_linux_fetchmail_status.log_healthy | default('no') }}"
+
+# specify the regex of error codes that will be used to search the log file_path
+# [default: error|authfail|lockbusy|ioerr]
+error_regex="{{ hc_check_linux_fetchmail_status.log_healthy | default('error|authfail|lockbusy|ioerr') }}"
+
+# specify fetchmail details
+# Format:
+#   fetchmail:<account>:<rc_file>:<check_log=Yes|No>
+# Examples:
+#fetchmail:vmail:/srv/vmail/janedoe/.fetchmailrc:Yes
+#fetchmail:vmail:/srv/vmail/johndoe/.fetchmailrc:No
+{% if hc_check_linux_fetchmail_status.account is defined and hc_check_linux_fetchmail_status.account is not none %}
+{% for entry in hc_check_linux_fetchmail_status.account | sort(attribute='name') %}
+fetchmail:{{ entry.name }}:{{ entry['rc_file'] }}:{{ entry['check_log'] }}
+{% endfor %}
+{% endif %}
+
+
+#******************************************************************************
+# End of FILE
+#******************************************************************************

@@ -42,6 +42,7 @@ Default values (non-null):
 * [check_aix_subsystems](docs/check_aix_subsystems.md)
 * [check_aix_sysbackup](docs/check_aix_sysbackup.md)
 * [check_aix_topasrec](docs/check_aix_topasrec.md)
+* [check_aix_uptime](docs/check_aix_uptime.md)
 
 #### Platform Clusterware
 
@@ -95,6 +96,7 @@ Default values (non-null):
 * [check_hpux_sshd_status](docs/check_hpux_sshd_status.md)
 * [check_hpux_syslog](docs/check_hpux_syslog.md)
 * [check_hpux_syslogd_status](docs/check_hpux_syslogd_status.md)
+* [check_hpux_uptime](docs/check_hpux_uptime.md)
 * [check_hpux_vg_minor_number](docs/check_hpux_vg_minor_number.md)
 
 #### Platform Linux
@@ -102,8 +104,10 @@ Default values (non-null):
 * [check_linux_autofs](docs/check_linux_autofs.md)
 * [check_linux_burp_backup](docs/check_linux_burp_backup.md)
 * [check_linux_burp_status](docs/check_linux_burp_status.md)
+* [check_linux_dovecot_status](docs/check_linux_dovecot_status.md)
 * [check_linux_es_status](docs/check_linux_es_status.md)
 * [check_linux_fail2ban_status](docs/check_linux_fail2ban_status.md)
+* [check_linux_fetchmail_status](docs/check_linux_fetchmail_status.md)
 * [check_linux_file_age](docs/check_linux_file_age.md)
 * [check_linux_file_change](docs/check_linux_file_change.md)
 * [check_linux_fs_mounts](docs/check_linux_fs_mounts.md)
@@ -122,6 +126,7 @@ Default values (non-null):
 * [check_linux_samba_status](docs/check_linux_samba_status.md)
 * [check_linux_shorewall_status](docs/check_linux_shorewall_status.md)
 * [check_linux_sshd_status](docs/check_linux_sshd_status.md)
+* [check_linux_uptime](docs/check_linux_uptime.md)
 * [check_linux_vz_ct_counters](docs/check_linux_vz_ct_counters.md)
 * [check_linux_vz_ct_status](docs/check_linux_vz_ct_status.md)
 * [check_linux_winbind_status](docs/check_linux_winbind_status.md)
@@ -143,7 +148,7 @@ Default values (non-null):
 * [hc_display_zenoss](docs/hc_display_zenoss.md)
 
 ### Plugin configuration (notify)
-
+check_linux_es_status
 * [hc_notify_eif](docs/hc_notify_eif.md)
 * [hc_notify_sms](docs/hc_notify_sms.md)
 
