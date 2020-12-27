@@ -299,7 +299,7 @@ hc_cron_packages:
     hc_check_linux_samba_status: "hc-cron-samba-status"
     hc_check_linux_shorewall_status: "hc-cron-shorewall-status"
     hc_check_linux_sshd_status: "hc-cron-sshd-status"
-    hc_check_linux_uptime: "hc-cron-sshd-uptime"
+    hc_check_linux_uptime: "hc-cron-uptime"
     hc_check_linux_vz_ct_status: "hc-cron-vz-ct-status"
     hc_check_linux_vz_ct_counters: "hc-cron-vz-ct-counters"
     hc_check_linux_winbind_status: "hc-cron-winbind-status"
