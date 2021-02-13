@@ -19,14 +19,16 @@ hc_core:
   will_fix: <yes|no>
   report_last_cache: <yes|no>
   report_today_cache: <yes|no>
+  count_archives: <yes|no>
 ```
 
 Default values (non-null):
-* *hc_time_out*: `60`
-* *hc_log_healthy*: `no`
-* *hc_will_fix*: `no`
-* *hc_report_last_cache* `no`
-* *hc_report_today_cache* `no`
+* *time_out*: `60`
+* *log_healthy*: `no`
+* *will_fix*: `no`
+* *report_last_cache* `no`
+* *report_today_cache* `no`
+* *count_archives* `yes`
 
 ### Plugin configuration (checks)
 

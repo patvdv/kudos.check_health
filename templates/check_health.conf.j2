@@ -1,5 +1,5 @@
 #******************************************************************************
-# @(#) check_health.conf [release >=20200418]
+# @(#) check_health.conf [release >=20210213]
 #******************************************************************************
 # This is the main configuration file for the check_health.sh tool.
 # All lines starting with a '#' are comment lines.
@@ -35,6 +35,10 @@ HC_REPORT_CACHE_LAST="{{ hc_core.report_last_cache | default('No') }}"
 # [values: Yes|No]
 # [default: No]
 HC_REPORT_CACHE_TODAY="{{ hc_core.report_today_cache | default('No') }}"
+
+# Show log entry count(s) after archiving. Disabling this will speed up archiving.
+# [values: Yes|No]
+HC_COUNT_ARCHIVES="{{ hc_core.count_archives | default('Yes') }}"
 
 
 #******************************************************************************

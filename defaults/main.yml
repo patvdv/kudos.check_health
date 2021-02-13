@@ -9,6 +9,7 @@ hc_core:
   will_fix: "no"
   report_last_cache: "yes"
   report_today_cache: "yes"
+  count_archives: "yes"
 
 # (plugin) configuration parameters
 hc_display_csv:
