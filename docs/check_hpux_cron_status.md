@@ -6,11 +6,17 @@
 hc_check_hpux_cron_status:
   enabled: <yes|no>
   scheduled: <yes|no>
+  log_healthy: <yes|no>
+  wait_time: <seconds>
+  cron_log: <path>
 ```
 
 Default values (non-null):
 * *enabled*: `yes`
 * *scheduled*: `no`
+* *log_healthy*: `no`
+* *wait_time*: `10`
+* *cron_log*: `/var/adm/cron/log`
 
 Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
 
@@ -32,4 +38,5 @@ Following **check host** parameters are considered optional within the plugin pa
 hc_check_hpux_cron_status:
   enabled: "yes"
   scheduled: "yes"
+  wait_time: 60
 ```
