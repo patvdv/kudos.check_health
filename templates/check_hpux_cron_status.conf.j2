@@ -13,7 +13,7 @@ log_healthy="{{ hc_check_hpux_cron_status.log_healthy | default('no') }}"
 
 # specify the wait time (in seconds) between registering and checking a cron task
 # [default: 10]
-wait_time="{{ hc_check_hpux_cron_status.log_healthy | default(10) }}"
+wait_time={{ hc_check_hpux_cron_status.wait_time | default('10') }}
 
 # specify the path the cron log file
 # [default: /var/adm/cron/log]
