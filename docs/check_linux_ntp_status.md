@@ -7,6 +7,9 @@ hc_check_linux_ntp_status:
   enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
+  force_chrony: <yes|no>
+  force_ntp: <yes|no>
+  force_systemd: <yes|no>
   max_offset: <millisecond>
   ntpq_use_ipv4: <yes|no>
 ```
@@ -16,6 +19,9 @@ Default values (non-null):
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *max_offset*: `500`
+* *force_chrony*: `no`
+* *force_ntp*: `no`
+* *force_systemd*: `no`
 * *ntpq_use_ipv4*: `yes`
 
 Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
@@ -39,6 +45,7 @@ hc_check_linux_ntp_status:
   enabled: "yes"
   scheduled: "yes"    
   log_healthy: "yes"
+  force_ntp: "yes"
   max_offset: 1000
   ntpq_use_ipv4: "yes"
 ```

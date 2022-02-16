@@ -19,6 +19,11 @@ force_chrony="{{ hc_check_linux_ntp_status.force_chrony | default('no') }}"
 # [default: no]
 force_ntp="{{ hc_check_linux_ntp_status.force_ntp | default('no') }}"
 
+# whether to force the use of systemd-timesyncd?
+# [default: no]
+# [release >20220129]
+force_systemd="{{ hc_check_linux_ntp_status.force_systemd | default('no') }}"
+
 # maximum allowed offset (in milliseconds (positive integers only)
 # [default: 500]
 max_offset={{ hc_check_linux_ntp_status.max_offset | default('500') }}
