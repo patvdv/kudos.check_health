@@ -11,7 +11,7 @@ hc_notify_eif:
 ```
 
 Default values (non-null):
-* *state*: `yes`
+* *installed*: `yes`
 * *EIF_BIN*: `/opt/eif/bin/posteifmsg`
 * *EIF_ETC*: `/etc/opt/eif/posteifmsg.conf`
 * *EIF_SEVERITY*: `MINOR`

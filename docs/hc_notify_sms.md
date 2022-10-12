@@ -12,8 +12,8 @@ hc_notify_sms:
 ```
 
 Default values (non-null):
-* *state*: `yes`
-* *sms_providers: `kapow`
+* *installed*: `yes`
+* *sms_providers*: `kapow`
 
 Parameter names are case-sensitive!
 

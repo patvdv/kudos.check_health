@@ -150,9 +150,10 @@ Default values (non-null):
 * [hc_display_zenoss](docs/hc_display_zenoss.md)
 
 ### Plugin configuration (notify)
-check_linux_es_status
+
 * [hc_notify_eif](docs/hc_notify_eif.md)
 * [hc_notify_sms](docs/hc_notify_sms.md)
+* [hc_notify_slack](docs/hc_notify_slack.md)
 
 ### Static definitions
 
@@ -197,4 +198,4 @@ GPL v3
 
 ## Author Information
 
-Patrick Van der Veken - KUDOS BVBA (http://www.kudos.be)
+Patrick Van der Veken - KUDOS BV (http://www.kudos.be)

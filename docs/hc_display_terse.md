@@ -8,7 +8,7 @@ hc_display_terse:
 ```
 
 Default values (non-null):
-* *state*: `yes`
+* *installed*: `yes`
 
 ### Example
 

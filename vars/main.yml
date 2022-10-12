@@ -13,6 +13,7 @@ hc_display_plugins:
 hc_notify_plugins:
   - hc_notify_sms
   - hc_notify_eif
+  - hc_notify_slack
 
 # plugins config definition (which plugins require a config file?)
 hc_configs:

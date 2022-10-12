@@ -8,7 +8,7 @@ hc_display_json:
 ```
 
 Default values (non-null):
-* *state*: `yes`
+* *installed*: `yes`
 
 ### Example
 
