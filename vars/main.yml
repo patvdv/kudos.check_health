@@ -40,6 +40,8 @@ hc_configs:
   - check_exadata_zfs_share_replication
   - check_exadata_zfs_share_usage
   - check_hpux_autofs
+  - check_hpux_cron_status
+  - check_hpux_defunct_processes
   - check_hpux_drd_status
   - check_hpux_file_age
   - check_hpux_file_change
@@ -110,6 +112,7 @@ hc_packages:
     hc_check_hpux_autopath: "HC-PLATFORM"
     hc_check_hpux_cdsf_cluster: "HC-PLATFORM"
     hc_check_hpux_cron_status: "HC-PLATFORM"
+    hc_check_hpux_defunct_processes: "HC-PLATFORM"
     hc_check_hpux_drd_status: "HC-PLATFORM"
     hc_check_hpux_file_age: "HC-PLATFORM"
     hc_check_hpux_file_change: "HC-PLATFORM"
@@ -227,6 +230,7 @@ hc_cron_packages:
     hc_check_hpux_autopath: "HC-CRON-autopath"
     hc_check_hpux_cdsf_cluster: "HC-CRON-cdsf_cluster"
     hc_check_hpux_cron_status: "HC-CRON-cron_status"
+    hc_check_hpux_defunct_processes: "HC-CRON-defunct_processes"
     hc_check_hpux_drd_status: "HC-CRON-drd_status"
     hc_check_hpux_file_age: "HC-CRON-file_age"
     hc_check_hpux_file_change: "HC-CRON-file_change"
