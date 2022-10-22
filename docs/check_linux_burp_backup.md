@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_linux_burp_backup:
+  installed: <yes|no>    
   enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
@@ -21,6 +22,7 @@ hc_check_linux_burp_backup:
 ```
 
 Default values (non-null):
+* *installed*: `no`
 * *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`

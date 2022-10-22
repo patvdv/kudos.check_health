@@ -2,12 +2,14 @@
 # tasks file for health_check
 - name: "Get desired state for /etc/opt/hc/check_host.conf"
   # compile list of check_host entries
-  set_fact: 
+  set_fact:
     hc_ds_check_host: "{{ hc_ds_check_host | default([]) + [item] }}"
   loop: "{{ hc_plugins | sort }}"
   when:
     - (hc_plugins is defined) and hc_plugins
     - (vars[item]['check_host'].active is defined) and vars[item]['check_host'].active | bool
+    # only add plugins that are installed=yes in the inventory
+    - (vars[item].installed is defined) and vars[item].installed | bool
   tags: check_host
 
 - name: "Configure /etc/opt/hc/check_host.conf"

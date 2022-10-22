@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_linux_postfix_status:
+  installed: <yes|no>    
   enabled: <yes|no>
   scheduled: <yes|no>
   cron:
@@ -16,6 +17,7 @@ hc_check_linux_postfix_status:
 ```
 
 Default values (non-null):
+* *installed*: `no`
 * *enabled*: `yes`
 * *scheduled*: `no`
 * *cron/when*: `00 * * * *`

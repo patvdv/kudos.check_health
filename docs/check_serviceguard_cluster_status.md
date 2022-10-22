@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_serviceguard_cluster_status:
+  installed: <yes|no>    
   enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
@@ -20,6 +21,7 @@ hc_check_serviceguard_cluster_status:
 ```
 
 Default values (non-null):
+* *installed*: `no`
 * *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`

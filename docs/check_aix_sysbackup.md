@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_aix_sysbackup:
+  installed: <yes|no>    
   enabled: <yes|no>
   log_healthy: <yes|no>
   backup_path: <dir_path>
@@ -19,6 +20,7 @@ hc_check_aix_sysbackup:
 ```
 
 Default values (non-null):
+* *installed*: `no`
 * *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`

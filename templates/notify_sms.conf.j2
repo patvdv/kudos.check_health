@@ -8,12 +8,7 @@
 
 # --- SMS settings ---
 # list of supported SMS providers (comma-separated)
-SMS_PROVIDERS="{{ hc_notify_sms.sms_providers | default('kapow') }}"
-
-# configuration settings for individual SMS providers go here
-SMS_KAPOW_SEND_URL="{{ hc_notify_sms.sms_kapow_send_url | default('http://www.kapow.co.uk/scripts/sendsms.php') }}"
-SMS_KAPOW_USER="{{ hc_notify_sms.sms_kapow_user }}"
-SMS_KAPOW_PASS="{{ hc_notify_sms.sms_kapow_pass }}"
+SMS_PROVIDERS="{{ hc_notify_sms.sms_providers | default('') }}"
 
 
 #******************************************************************************

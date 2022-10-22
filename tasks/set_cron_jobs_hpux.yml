@@ -13,6 +13,8 @@
     - (vars[item].scheduled is defined) and vars[item].scheduled | bool
     - ((hc_cron_packages[os_type] is defined) and item in hc_cron_packages[os_type]) or ((hc_extra_cron_packages[os_type] is defined) and item in hc_extra_cron_packages[os_type])
     - (hc_core.installed is defined) and hc_core.installed | bool
+    # only add plugins that are installed=yes in the inventory
+    - (vars[item].installed is defined) and vars[item].installed | bool
     - is_hpux
 
 - name: "Build desired state for cron (#2)"

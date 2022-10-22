@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_exadata_cell_megaraid:
+  installed: <yes|no>    
   enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
@@ -27,6 +28,7 @@ hc_check_exadata_cell_megaraid:
 ```
 
 Default values (non-null):
+* *installed*: `no`
 * *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`

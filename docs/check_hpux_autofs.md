@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_hpux_autofs:
+  installed: <yes|no>    
   enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
@@ -13,6 +14,7 @@ hc_check_hpux_autofs:
 ```
 
 Default values (non-null):
+* *installed*: `no`
 * *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`

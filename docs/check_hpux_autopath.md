@@ -4,11 +4,13 @@
 
 ```yaml
 hc_check_hpux_autopath:
+  installed: <yes|no>    
   enabled: <yes|no>
   scheduled: <yes|no>
 ```
 
 Default values (non-null):
+* *installed*: `no`
 * *enabled*: `yes`
 * *scheduled*: `no`
 

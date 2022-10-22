@@ -19,6 +19,8 @@
     # only update .conf file for a plugin that requires a .conf file
     - ((hc_configs is defined) and item in hc_configs) or ((hc_extra_configs is defined) and item in hc_extra_configs)
     - (hc_core.installed is defined) and hc_core.installed | bool
+    # only add/update .conf file for plugins that are installed=yes in the inventory
+    - (vars['hc_' + item].installed is defined) and vars['hc_' + item].installed | bool
   # remove 'hc_' bit and loop over resulting list
   loop: "{{ hc_plugins | map('regex_replace', '^hc_', '') | list | sort }}"
   tags: plugin_config
@@ -34,6 +36,23 @@
   when:
     - (hc_get_config.files is defined) and hc_get_config.files
     - (item | basename | replace('.conf', '')) not in (hc_plugins | map('regex_replace', '^hc_', '') | list)
+    - (vars['hc_' + item].installed is not defined) or ((vars['hc_' + item].installed is defined) and vars['hc_' + item].installed | bool == False)
+  tags: plugin_config
+
+- name: "Set plugin configuration (notify_slack)"
+  template:
+    src: "notify_slack.conf.j2"
+    dest: "/etc/opt/hc/core/providers/notify_slack.conf"
+  when:
+    - (hc_notify_slack.installed is defined) and hc_notify_slack.installed | bool
+  tags: plugin_config
+
+- name: "Set plugin configuration (notify_slack)"
+  file:
+    state: absent
+    path: "/etc/opt/hc/core/providers/notify_slack.conf"
+  when:
+    - (hc_notify_slack.installed is not defined) or ((hc_notify_slack.installed is defined) and not hc_notify_slack.installed | bool)
   tags: plugin_config
 
 - name: "Set plugin configuration (notify_sms)"

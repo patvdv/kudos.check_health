@@ -57,6 +57,15 @@ Above settings can be overridden by specific values in individual plugins.
 
 ### Plugin configuration (checks)
 
+### States
+
+Plugins can have 3 different levels of **state** settings:
+* *installed*: the plugin must be present/installed on the target host.
+* *enabled*: the plugin must be enabled (allowed to run) on the target host.
+* *scheduled*: the plugin must be scheduled to run on the target host. Currently only schedeling via *cron* is supported.
+
+*Note:* setting the *installed* will determine whether the corresponding package will be installed or not. Plugins that are bundled together in a package will have their package installed when at least one plugin of that package is set to be installable. In that case there will not be a 1-1 relationship between the *installed* flag and the presence of the plugin on the target host.
+
 #### Platform AIX
 
 * [check_aix_errpt](docs/check_aix_errpt.md)

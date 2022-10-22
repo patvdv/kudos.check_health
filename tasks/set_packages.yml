@@ -12,6 +12,8 @@
     - (hc_plugins is defined) and hc_plugins
     - ((hc_packages[os_type] is defined) and item in hc_packages[os_type]) or ((hc_extra_packages[os_type] is defined) and item in hc_extra_packages[os_type])
     - (hc_core.installed is defined) and hc_core.installed | bool
+    # only add plugins that are installed=yes in the inventory
+    - (vars[item].installed is defined) and vars[item].installed | bool
 
 - name: "Build desired state of (plugin) package(s) (#2)"
   # compile a list of packages that need to be present (hc_core.installed=no -> empty list)
@@ -33,6 +35,8 @@
     - (hc_extra_packages is defined) and hc_extra_packages
     - item in hc_extra_packages[os_type]
     - (hc_core.installed is defined) and hc_core.installed | bool
+    # only add plugins that are installed=yes in the inventory
+    - (vars[item].installed is defined) and vars[item].installed | bool
 
 - name: "Build desired state of (display/notify) package(s)"
   # compile a list of packages that need to be present (add display + notify plugins) (hc_core.installed=no -> empty list)
@@ -43,7 +47,7 @@
   when:
     - (hc_display_plugins is defined) and hc_display_plugins
     - (hc_notify_plugins is defined) and hc_notify_plugins
-    - vars[item].installed | bool
+    - (vars[item].installed is defined) and vars[item].installed | bool
     - item in hc_packages[os_type]
     - (hc_core.installed is defined) and hc_core.installed | bool
 
@@ -130,7 +134,7 @@
   pacman:
     name: "{{ item }}"
     state: absent
-  when: 
+  when:
     - (hc_ds_packages is not defined) or ((hc_ds_packages is defined) and item not in hc_ds_packages)
     - is_arch
   loop: "{{ hc_installed | select('match', 'hc-*') | reject('match', 'hc-cron*') | list }}"

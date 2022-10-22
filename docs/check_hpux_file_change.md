@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_hpux_file_change:
+  installed: <yes|no>    
   enabled: <yes|no>
   scheduled: <yes|no>
   log_healthy: <yes|no>
@@ -16,6 +17,7 @@ hc_check_hpux_file_change:
 ```
 
 Default values (non-null):
+* *installed*: `no`
 * *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`

@@ -4,6 +4,7 @@
 
 ```yaml
 hc_check_aix_lppchk:
+  installed: <yes|no>    
   enabled: <yes|no>
   scheduled: <yes|no>
   cron:
@@ -16,6 +17,7 @@ hc_check_aix_lppchk:
 ```
 
 Default values (non-null):
+* *installed*: `no`
 * *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
