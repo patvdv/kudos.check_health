@@ -2,121 +2,49 @@
 # tasks file for health_check
 # note: use double interpolation via vars[] to lookup the list item as dict
 
-- name: "Build desired state for cron (#1)"
+- name: "Find cron job files"
+  find:
+    paths: /etc/cron.d
+    patterns: 'hc_check*'
+    recurse: no
+    excludes: ''
+  # save output, look for files.[].path entries later
+  register: hc_get_cron
+  tags: cron_jobs
+
+- name: "Build desired state for cron"
   # compile a list of plugins that need to be scheduled
   set_fact:
     hc_ds_cron_plugins: "{{ hc_ds_cron_plugins | default([]) + [item] }}"
   loop: "{{ hc_plugins }}"
-  tags: cron_jobs
   when:
     - (hc_plugins is defined) and hc_plugins
     - (vars[item].scheduled is defined) and vars[item].scheduled | bool
-    - ((hc_cron_packages[os_type] is defined) and item in hc_cron_packages[os_type]) or ((hc_extra_cron_packages[os_type] is defined) and item in hc_extra_cron_packages[os_type])
     - (hc_core.installed is defined) and hc_core.installed | bool
-
-- name: "Build desired state for cron (#2)"
-  # compile a list of cron packages that need to be present (hc_core.installed=no -> empty list)
-  set_fact:
-    hc_ds_cron_packages: "{{ hc_ds_cron_packages | default([]) + [hc_cron_packages[os_type][item]] }}"
-  loop: "{{ hc_ds_cron_plugins | default([]) }}"
-  tags: cron_jobs
-  when:
-    - item in hc_cron_packages[os_type]
-    - (hc_core.installed is defined) and hc_core.installed | bool
-
-- name: "Build desired state for (extra) cron"
-  # compile a list of cron packages that need to be present (add "extra") (hc_core.installed=no -> empty list)
-  set_fact:
-    hc_ds_cron_packages: "{{ hc_ds_cron_packages | default([]) + [hc_extra_cron_packages[os_type][item]] }}"
-  loop: "{{ hc_ds_cron_plugins | default([]) }}"
-  tags: cron_jobs
-  when:
-    - (hc_extra_cron_packages is defined) and hc_extra_cron_packages
-    - item in hc_extra_cron_packages[os_type]
-
-- name: "Set cron jobs (add)"
-  package:
-    name: "{{ item }}"
-    state: latest
-  when:
-    - (hc_ds_cron_packages is defined) and hc_ds_cron_packages
-    - (hc_core.installed is defined) and hc_core.installed | bool
-    - not is_arch
-    - not is_centos5
-    - not is_hpux
-  loop: "{{ hc_ds_cron_packages | default([]) | sort }}"
   tags: cron_jobs
 
-- name: "Set cron jobs (add)"
-  command: "yum install -y -e0 -d2 {{ item }}"
-  register: yum
+- name: "Set cron jobs (add/update)"
+  vars:
+      default_schedule: "{{ hc_scheduling.cron }}"
+      plugin_schedule: "{{ vars[item].cron }}"
+  ansible.builtin.template:
+    src: "cron_job.j2"
+    dest: "/etc/cron.d/{{ item }}"
   when:
-    # do not check against hc_installed so we can simulate state: latest
-    - (hc_ds_cron_packages is defined) and hc_ds_cron_packages
+    - (hc_plugins is defined) and hc_plugins
     - (hc_core.installed is defined) and hc_core.installed | bool
-    - is_centos5
-  changed_when: "'already installed and latest version' not in yum.stdout"
-  loop: "{{ hc_ds_cron_packages | default([]) | sort }}"
+  loop: "{{ hc_ds_cron_plugins | default([]) | sort }}"
   tags: cron_jobs
-
-- name: "Set cron jobs (add)"
-  pacman:
-    name: "{{ item }}"
-    state: present
-    update_cache: yes
-  when:
-    - (hc_ds_cron_packages is defined) and hc_ds_cron_packages
-    - (hc_core.installed is defined) and hc_core.installed | bool
-    - is_arch
-  loop: "{{ hc_ds_cron_packages | default([]) | sort }}"
-  tags: cron_jobs
-
-- name: "Update packages (add)"
-  command: "swinstall -s {{ hc_hpux_depot }} {{ item }}"
-  register: swinstall
-  when:
-    # do not check against hc_installed so we can simulate state: latest
-    - (hc_ds_cron_packages is defined) and hc_ds_cron_packages
-    - (hc_core.installed is defined) and hc_core.installed | bool
-    - is_hpux
-  changed_when: "'1 bundles have the selected revision already' not in swinstall.stdout"
-  loop: "{{ hc_ds_cron_packages | default([]) | sort }}"
-  tags: package_deploy
 
 - name: "Set cron jobs (remove)"
-  package:
-    name: "{{ item }}"
+  file:
     state: absent
+    path: "{{ item }}"
+  # loop over resulting files from 'find' command (filter for short basename first)
+  # map .path attribute here to avoid verbose hash output in the playbook run
+  loop: "{{ hc_get_cron.files | map(attribute='path') | list }}"
+  # check if entry exist in the list of configured plugins (hc_plugins)
   when:
-    - (hc_ds_cron_packages is not defined) or ((hc_ds_cron_packages is defined) and item not in hc_ds_cron_packages)
-    - not is_arch
-    - not is_centos5
-    - not is_hpux
-  loop: "{{ hc_installed | select('match', 'hc-cron*') | list | sort }}"
+    - (hc_get_cron.files is defined) and hc_get_cron.files
+    - (item | basename) not in (hc_ds_cron_plugins | list)
   tags: cron_jobs
-
-- name: "Set cron jobs (remove)"
-  command: "yum remove -y -e0 -d2 {{ item }}"
-  when:
-    - (hc_ds_cron_packages is not defined) or ((hc_ds_cron_packages is defined) and item not in hc_ds_cron_packages)
-    - is_centos5
-  loop: "{{ hc_installed | select('match', 'hc-cron*') | list | sort }}"
-  tags: cron_jobs
-
-- name: "Set cron jobs (remove)"
-  pacman:
-    name: "{{ item }}"
-    state: absent
-  when:
-    - (hc_ds_cron_packages is not defined) or ((hc_ds_cron_packages is defined) and item not in hc_ds_cron_packages)
-    - is_arch
-  loop: "{{ hc_installed | select('match', 'hc-cron*') | list | sort }}"
-  tags: cron_jobs
-
-- name: "Deploy packages (remove)"
-  command: "swremove {{ item }}"
-  when:
-    - (hc_ds_cron_packages is not defined) or ((hc_ds_cron_packages is defined) and item not in hc_ds_cron_packages)
-    - is_hpux
-  loop: "{{ hc_installed | select('match', 'HC-CRON*') | list | sort }}"
-  tags: package_deploy

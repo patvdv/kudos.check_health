@@ -11,14 +11,25 @@ hc_check_clusterware_resource_status:
   resources:
     - name: <resource>
       state: <state_definition>
+  cron:
+    when: <time_date_definition>
+    user: <text>
+    action: <text>
+    no_lock: <yes|no>
+    timeout: <number_seconds>
+    options: <text>      
 ```
 
 Default values (non-null):
 * *enabled*: `yes`
 * *scheduled*: `no`
 * *log_healthy*: `no`
+* *cron/when*: `00 * * * *`
+* *cron/user*: `root`
+* *cron/action*: `--run`
+* *cron/no_lock*: `no`
 
-Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+Setting the option *scheduled=yes* will result in the corresponding **cron** file to be created.
 
 Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
 

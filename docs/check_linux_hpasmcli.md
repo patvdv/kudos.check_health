@@ -13,6 +13,13 @@ hc_check_linux_hpasmcli:
   do_asm_powersupply: <0|1>
   do_asm_server: <0|1>
   do_asm_temperature: <0|1>
+  cron:
+    when: <time_date_definition>
+    user: <text>
+    action: <text>
+    no_lock: <yes|no>
+    timeout: <number_seconds>
+    options: <text>  
 ```
 
 Default values (non-null):
@@ -25,11 +32,14 @@ Default values (non-null):
 * *do_asm_powersupply*: `1`
 * *do_asm_server*: `1`
 * *do_asm_temperature*: `1`
+* *cron/when*: `00 * * * *`
+* *cron/user*: `root`
+* *cron/action*: `--run`
+* *cron/no_lock*: `no`
 
-Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+Setting the option *scheduled=yes* will result in the corresponding **cron** file to be created.
 
 Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
-
 
 Following **check host** parameters are considered optional within the plugin parameter block:
 

@@ -30,6 +30,31 @@ Default values (non-null):
 * *report_today_cache* `no`
 * *count_archives* `yes`
 
+### Scheduling (cron) configuration
+
+```yaml
+hc_scheduling:
+  cron:
+    when: <time_date_definition>
+    user: <text>
+    action: <text>
+    no_lock: <yes|no>
+    timeout: <number_seconds>
+    options: <text>
+```
+
+Default values (non-null):
+* *enabled*: `yes`
+* *scheduled*: `no`
+* *cron/when*: `00 * * * *`
+* *cron/user*: `root`
+* *cron/action*: `--run`
+* *cron/no_lock*: `no`
+
+Above settings can be overridden by specific values in individual plugins.
+
+*Note:* the scheduling (cron) settings are not supported for the HP-UX plugins. For scheduling on HP-UX, cron packages should be used instead.
+
 ### Plugin configuration (checks)
 
 #### Platform AIX
@@ -162,7 +187,7 @@ Following variables must be available in the role vars:
 - `hc_notify_plugins`: list of notify plugins
 - `hc_configs`: list of plugins that require a configuration file
 - `hc_packages`: map plugin -> package
-- `hc_cron_packages`: map plugin -> cron package
+- `hc_cron_packages`: map plugin -> cron package (only for HP-UX)
 
 *Note:* do not change these definitions unless you know what you are doing!
 
@@ -170,7 +195,7 @@ Additionally, following static vars may be defined to configure custom plugins:
 
 - `hc_extra_configs`: list of plugins that require a configuration file
 - `hc_extra_packages`: map plugin -> package
-- `hc_extra_cron_packages`: map plugin -> cron package
+- `hc_extra_cron_packages`: map plugin -> cron package (only for HP-UX)
 
 
 ## Dependencies

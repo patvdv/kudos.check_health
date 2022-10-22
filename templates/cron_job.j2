@@ -1,0 +1,50 @@
+#******************************************************************************
+# This is a cronjob file for the {{ item }} HC plugin.
+#******************************************************************************
+
+{# when specification #}
+{%- if plugin_schedule.when is defined and plugin_schedule.when is not none -%}
+{{ plugin_schedule.when }}
+{%- elif default_schedule.when is defined and default_schedule.when is not none -%}
+{{ default_schedule.when }}
+{%- else -%}
+00 * * * *
+{%- endif -%}
+{# user specification #}
+{%- if plugin_schedule.user is defined and plugin_schedule.user is not none -%}
+{{' '}}{{ plugin_schedule.user }}
+{%- elif default_schedule.user is defined and default_schedule.user is not none -%}
+{{' '}}{{ default_schedule.user }}
+{%- else -%}
+{{' '}}root
+{%- endif -%}
+{# command (wrapped in a jinja block for whitespace control) #}
+{%- if item is defined and item is not none -%}
+{{' '}}/opt/hc/bin/check_health.sh --hc={{ item | regex_replace('^hc_', '') }}
+{%- endif -%}
+{# action specification #}
+{%- if plugin_schedule.action is defined and plugin_schedule.action is not none -%}
+{{' '}}{{ plugin_schedule.action }}
+{%- elif default_schedule.action is defined and default_schedule.action is not none -%}
+{{' '}}{{ default_schedule.action }}
+{%- else -%}
+{{' '}}--run
+{%- endif -%}
+{# options: --no-lock #}
+{%- if plugin_schedule.no_lock is defined and plugin_schedule.no_lock | bool == true -%}
+{{' '}}--no-lock
+{%- elif default_schedule.no_lock is defined and default_schedule.no_lock | bool == true -%}
+{{' '}}--no-lock
+{%- endif -%}
+{# options: -timeout #}
+{%- if plugin_schedule.timeout is defined and plugin_schedule.timeout is not none -%}
+{{' '}}--timeout={{ plugin_schedule.timeout }}
+{%- elif default_schedule.timeout is defined and default_schedule.timeout is not none -%}
+{{' '}}--timeout={{ default_schedule.timeout }}
+{%- endif -%}
+{# other options #}
+{%- if plugin_schedule.options is defined and plugin_schedule.options is not none -%}
+{{' '}}{{ plugin_schedule.options }}
+{%- elif default_schedule.options is defined and default_schedule.options is not none -%}
+{{' '}}{{ default_schedule.options }}
+{%- endif -%}

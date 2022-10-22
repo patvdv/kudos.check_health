@@ -8,6 +8,13 @@ hc_check_linux_es_status:
   scheduled: <yes|no>
   log_healthy: <yes|no>
   es_url: <url>
+  cron:
+    when: <time_date_definition>
+    user: <text>
+    action: <text>
+    no_lock: <yes|no>
+    timeout: <number_seconds>
+    options: <text>
 ```
 
 Default values (non-null):
@@ -15,8 +22,12 @@ Default values (non-null):
 * *scheduled*: `no`
 * *log_healthy*: `no`
 * *es_url*: `http://localhost:9200`
+* *cron/when*: `00 * * * *`
+* *cron/user*: `root`
+* *cron/action*: `--run`
+* *cron/no_lock*: `no`
 
-Setting the option *scheduled=yes* will result in the corresponding **cron** bundle to be installed (if available).
+Setting the option *scheduled=yes* will result in the corresponding **cron** file to be created.
 
 Setting the option *enabled=no* will disable the health check and will emulate a monitoring blackout or maintenance.
 

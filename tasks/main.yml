@@ -181,4 +181,9 @@
 #  deploy cron configuration/jobs
 - include: set_cron_jobs.yml
   when:
+    - not is_hpux
+    - hc_core is defined
+- include: set_cron_jobs_hpux.yml
+  when:
+    - is_hpux
     - hc_core is defined

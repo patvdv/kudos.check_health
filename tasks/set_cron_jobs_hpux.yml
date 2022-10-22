@@ -1,0 +1,58 @@
+---
+# tasks file for health_check
+# note: use double interpolation via vars[] to lookup the list item as dict
+
+- name: "Build desired state for cron (#1)"
+  # compile a list of plugins that need to be scheduled
+  set_fact:
+    hc_ds_cron_plugins: "{{ hc_ds_cron_plugins | default([]) + [item] }}"
+  loop: "{{ hc_plugins }}"
+  tags: cron_jobs
+  when:
+    - (hc_plugins is defined) and hc_plugins
+    - (vars[item].scheduled is defined) and vars[item].scheduled | bool
+    - ((hc_cron_packages[os_type] is defined) and item in hc_cron_packages[os_type]) or ((hc_extra_cron_packages[os_type] is defined) and item in hc_extra_cron_packages[os_type])
+    - (hc_core.installed is defined) and hc_core.installed | bool
+    - is_hpux
+
+- name: "Build desired state for cron (#2)"
+  # compile a list of cron packages that need to be present (hc_core.installed=no -> empty list)
+  set_fact:
+    hc_ds_cron_packages: "{{ hc_ds_cron_packages | default([]) + [hc_cron_packages[os_type][item]] }}"
+  loop: "{{ hc_ds_cron_plugins | default([]) }}"
+  tags: cron_jobs
+  when:
+    - item in hc_cron_packages[os_type]
+    - (hc_core.installed is defined) and hc_core.installed | bool
+    - is_hpux
+
+- name: "Build desired state for (extra) cron"
+  # compile a list of cron packages that need to be present (add "extra") (hc_core.installed=no -> empty list)
+  set_fact:
+    hc_ds_cron_packages: "{{ hc_ds_cron_packages | default([]) + [hc_extra_cron_packages[os_type][item]] }}"
+  loop: "{{ hc_ds_cron_plugins | default([]) }}"
+  tags: cron_jobs
+  when:
+    - (hc_extra_cron_packages is defined) and hc_extra_cron_packages
+    - item in hc_extra_cron_packages[os_type]
+    - is_hpux
+
+- name: "Update packages (add)"
+  command: "swinstall -s {{ hc_hpux_depot }} {{ item }}"
+  register: swinstall
+  when:
+    # do not check against hc_installed so we can simulate state: latest
+    - (hc_ds_cron_packages is defined) and hc_ds_cron_packages
+    - (hc_core.installed is defined) and hc_core.installed | bool
+    - is_hpux
+  changed_when: "'1 bundles have the selected revision already' not in swinstall.stdout"
+  loop: "{{ hc_ds_cron_packages | default([]) | sort }}"
+  tags: cron_jobs
+
+- name: "Deploy packages (remove)"
+  command: "swremove {{ item }}"
+  when:
+    - (hc_ds_cron_packages is not defined) or ((hc_ds_cron_packages is defined) and item not in hc_ds_cron_packages)
+    - is_hpux
+  loop: "{{ hc_installed | select('match', 'HC-CRON*') | list | sort }}"
+  tags: cron_jobs

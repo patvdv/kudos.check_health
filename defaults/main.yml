@@ -31,3 +31,10 @@ hc_notify_slack:
 
 # repository parameters
 hc_hpux_depot: "/var/spool/sw"
+
+# scheduling defaults
+hc_scheduling:
+  cron:
+    when: "00 * * * *"
+    no_lock: "yes"
+    options: "--notify=mail --mail-to=monitoring@acme.com --no-lock >/dev/null 2>/dev/null"
