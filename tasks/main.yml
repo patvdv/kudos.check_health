@@ -155,6 +155,17 @@
     - package_deploy
     - cron_jobs
 
+# end the play if hc_core is not set or hc_core.installed is false
+- block:
+    - name: "Check install"
+      debug:
+        msg: "HC is not to be installed -> ending play"
+    - meta: end_host
+  when:
+    - (hc_core is not defined) or (hc_core is defined and not hc_core.installed | bool)
+  tags:
+    - always
+
 # deploy packages
 - include: set_packages.yml
   when:
