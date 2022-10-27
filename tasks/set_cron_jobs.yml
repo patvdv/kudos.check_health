@@ -46,5 +46,5 @@
   # check if entry exist in the list of configured plugins (hc_plugins)
   when:
     - (hc_get_cron.files is defined) and hc_get_cron.files
-    - (item | basename) not in (hc_ds_cron_plugins | list)
+    - (item | basename) not in (hc_ds_cron_plugins | default([]) | list)
   tags: cron_jobs
