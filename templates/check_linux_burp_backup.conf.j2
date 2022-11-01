@@ -19,7 +19,7 @@ log_healthy="{{ hc_check_linux_burp_backup.log_healthy | default('no') }}"
 #client:host2:0:2d
 #client:host3:0:5w
 {% if hc_check_linux_burp_backup.client is defined and hc_check_linux_burp_backup.client is not none %}
-{% for entry in hc_check_linux_burp_backup.client | sort %}
+{% for entry in hc_check_linux_burp_backup.client %}
 client:{{ entry.name }}:{{ entry['max_warnings_allowed'] }}:{{ entry['max_backup_age'] }}
 {% endfor %}
 {% endif %}
